@@ -1,9 +1,10 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">
-问卷管理系统    </div>
+     问卷管理系统
+    </div>
     <div>
-      <a href=""></a>
+      <a href=""></a>  
     </div>
     <div>
       
