@@ -1,0 +1,209 @@
+<template>
+  <div class="app-container">
+    <el-row :gutter="20">
+      <el-col :span="24" :xs="24">
+        <el-form
+          v-show="showSearch"
+          ref="queryForm"
+          :model="queryParams"
+          :inline="true"
+          label-width="68px"
+        >
+          <el-form-item label="模糊搜索" prop="title">
+            <el-input
+              v-model="queryParams.title"
+              placeholder="请输入关键字"
+              clearable
+              size="small"
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="数据状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="" clearable size="small">
+          <el-option :key="0" label="全部" :value="0" />
+          <el-option :key="1" label="推荐" :value="1" />
+        </el-select>
+      </el-form-item>
+          <el-form-item label="数据类型" prop="type">
+            <el-select v-model="queryParams.type" placeholder="" clearable size="small">
+              <el-option :key="0" label="全部" :value="0" />
+              <el-option :key="1" label="facebook" :value="1" />
+              <el-option :key="2" label="twitter" :value="2" />
+              <el-option :key="3" label="google" :value="3" />
+              <el-option :key="4" label="reddit" :value="4" />
+              <el-option :key="5" label="linkedin" :value="5" />
+            </el-select>
+        </el-form-item>
+          <el-form-item>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              size="mini"
+              @click="handleQuery"
+            >搜索</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+   
+    <el-table
+    :data="tableData"
+    style="width: 100%" :expand-row-keys="expandedRows">
+    <el-table-column type="expand" >
+      <template slot-scope="props">
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-form-item label="ID" style="display: block;">
+            <span>{{ props.row.name }}</span>
+            <div style="display: inline-block; width: 150px;"></div>
+            <el-button type="primary" plain @click="copyText()">复制</el-button>
+          </el-form-item>
+          <el-form-item label="链接地址" style="display: block;" >
+            <span>{{ props.row.shop }}</span>
+            <div style="display: inline-block; width: 150px;"></div>
+            <el-button type="primary" plain @click="copyText()">复制</el-button>
+          </el-form-item>
+          <el-form-item label="标题翻译" style="display: block;">
+            <span>{{ props.row.id }}</span>
+            <div style="display: inline-block; width: 150px;"></div>
+            <el-button type="primary" plain @click="copyText()">复制</el-button>
+          </el-form-item>
+          <el-form-item label="摘要翻译" style="display: block;">
+            <span>{{ props.row.category }}</span>
+            <div style="display: inline-block; width: 150px;"></div>
+            <el-button type="primary" plain @click="copyText(this.category)">复制</el-button>
+          </el-form-item>
+          <el-form-item label="收录时间" style="display: block;">
+            <span>{{ props.row.address }}</span>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="标题" width="100">
+    </el-table-column>
+    <el-table-column
+      label="图标"
+      prop="name" width="auto">
+    </el-table-column>
+    <el-table-column
+      label="摘要翻译"
+      prop="desc" width="auto">
+    </el-table-column>
+    <el-table-column
+      label="收录时间"
+      prop="desc" width="auto">
+    </el-table-column>
+    <el-table-column label="操作" width="auto">
+  <div>
+    <el-link style="color: cornflowerblue;" :href="address" target="_self">
+      查看<i class="el-icon-view el-icon--right"></i>
+    </el-link>
+  </div>
+</el-table-column>
+
+
+    
+  </el-table>
+  
+  <el-pagination
+      :page-size.sync="queryParams.pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      :page-sizes="[10, 20, 30, 40]"
+      :current-page.sync="queryParams.pageNum"
+      @current-change="getList"
+      @size-change="getList"
+/>
+  </div>
+</template>
+<style>
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+  
+</style>
+
+
+<script>
+// import { getToken } from '@/utils/auth'
+import {
+  listArticle,
+  delArticle
+}
+from '@/api/content/article'
+
+export default {
+  name: 'Article',
+  data() {
+    return {
+      methods: {
+              copyText(text, isSelect) {
+              const textarea = this.$refs.copyTextarea;
+              textarea.value = text;
+              textarea.focus();
+              if (isSelect) {
+                textarea.select();
+              } else {
+                textarea.setSelectionRange(0, textarea.value.length);
+              }
+              try {
+                document.execCommand('copy');
+                this.$message.success('已复制到剪贴板');
+              } catch (err) {
+                this.$message.error('复制失败');
+              }
+            },
+},
+      tableData: [{
+            id: '12987126',
+            name: '好滋好味鸡蛋仔',
+            category: '江浙小吃、小吃零食',
+            desc: '荷兰优质淡奶，奶香浓而不腻',
+            address: '上海市普陀区真北路',
+            shop: '王小虎夫妻店',
+            shopId: '10333'
+          },{
+            id: '12987125',
+            name: '好滋好味鸡蛋仔',
+            category: '江浙小吃、小吃零食',
+            desc: '荷兰优质淡奶，奶香浓而不腻',
+            address: '上海市普陀区真北路',
+            shop: '王小虎夫妻店',
+            shopId: '10333'
+          }],
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 5,
+        keyword: undefined,
+        status: undefined,
+         // 设置默认选项为 '全部'
+        type: 0,
+        address: 'www.baidu.com'
+      },
+      title: '',
+      // 是否显示弹出层
+      open: false,
+      // 总条数
+      total: 0,
+      articleList: [],
+      showSearch: true,
+      address: 'https://www.baidu.com'
+    }
+  },
+  watch: {},
+  created() {
+    this.getList()
+  },
+}
+</script>
