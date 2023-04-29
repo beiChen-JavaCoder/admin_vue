@@ -23,19 +23,29 @@
               <el-option :key="5" label="linkedin" :value="5" />
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="dataRange">
-            <div class="block">
-              <span class="demonstration"></span>
-              <el-date-picker
-              v-model="queryParams.dataRange"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-              </el-date-picker>
-            </div>
-          </el-form-item>
+          <div class="block">
+    <span class="demonstration">默认</span>
+    <el-date-picker
+      v-model="value1"
+      type="daterange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker>
+  </div>
+  <div class="block">
+    <span class="demonstration">带快捷选项</span>
+    <el-date-picker
+      v-model="value2"
+      type="daterange"
+      align="right"
+      unlink-panels
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      :picker-options="pickerOptions">
+    </el-date-picker>
+  </div>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="getList">搜索</el-button>
           </el-form-item>
@@ -43,7 +53,11 @@
       </el-col>
     </el-row>
 
-    <el-table :data="tableData" border="true" stripe style="width: 100%" :expand-row-keys="expandedRows">
+    <el-table :data="tableData"
+    border="true"
+    stripe
+    style="width: 100%"
+    :expand-row-keys="expandedRows">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -74,7 +88,7 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="标题" width="aotu" prop="title" header-align="center" align="left">
+      <el-table-column label="标题" width="aotu" prop="title" header-align="center" align="left" >
       </el-table-column>
       <el-table-column label="摘要翻译" prop="snippet" width="aotu" header-align="center" align="left">
       </el-table-column>
@@ -132,9 +146,7 @@ export default {
         pageSize: 10,
         keyWord: undefined,
         status: 0,
-        engine: 0,
-        dataRange:undefined 
-
+        engine: 0
       },
       title: '',
       // 是否显示弹出层

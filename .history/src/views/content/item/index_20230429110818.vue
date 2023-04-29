@@ -23,16 +23,12 @@
               <el-option :key="5" label="linkedin" :value="5" />
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="dataRange">
+          <el-form-item label="日期选择" prop="data">
             <div class="block">
               <span class="demonstration"></span>
               <el-date-picker
-              v-model="queryParams.dataRange"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
+              v-model="queryParams.data" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"
+                type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
               </el-date-picker>
             </div>
           </el-form-item>
@@ -133,7 +129,7 @@ export default {
         keyWord: undefined,
         status: 0,
         engine: 0,
-        dataRange:undefined 
+        data: undefined
 
       },
       title: '',

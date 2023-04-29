@@ -23,19 +23,6 @@
               <el-option :key="5" label="linkedin" :value="5" />
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="dataRange">
-            <div class="block">
-              <span class="demonstration"></span>
-              <el-date-picker
-              v-model="queryParams.dataRange"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-              </el-date-picker>
-            </div>
-          </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="getList">搜索</el-button>
           </el-form-item>
@@ -43,7 +30,11 @@
       </el-col>
     </el-row>
 
-    <el-table :data="tableData" border="true" stripe style="width: 100%" :expand-row-keys="expandedRows">
+    <el-table :data="tableData"
+    border="true"
+    stripe
+    style="width: 100%"
+    :expand-row-keys="expandedRows">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -74,15 +65,15 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="标题" width="aotu" prop="title" header-align="center" align="left">
+      <el-table-column label="标题" trigger="hover" resizable="t" width="auto" prop="title" header-align="center" align="left" >
       </el-table-column>
-      <el-table-column label="摘要翻译" prop="snippet" width="aotu" header-align="center" align="left">
+      <el-table-column label="摘要翻译" prop="snippet" width="auto" header-align="center" align="left">
       </el-table-column>
-      <el-table-column label="收录时间" prop="time" width="160px" align="center">
+      <el-table-column label="收录时间" prop="time" width="160" align="center">
       </el-table-column>
-      <el-table-column label="操作" width="80px" align="center">
+      <el-table-column label="操作" width="80" align="center">
         <template slot-scope="scope">
-          <a :href="scope.row.link" style="color: #409eff;" target="_blank">查看</a>
+          <a :href="scope.row.link" style="color: blue;" target="_blank">查看</a>
         </template>
       </el-table-column>
 
@@ -132,9 +123,7 @@ export default {
         pageSize: 10,
         keyWord: undefined,
         status: 0,
-        engine: 0,
-        dataRange:undefined 
-
+        engine: 0
       },
       title: '',
       // 是否显示弹出层

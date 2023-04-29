@@ -23,19 +23,15 @@
               <el-option :key="5" label="linkedin" :value="5" />
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="dataRange">
-            <div class="block">
-              <span class="demonstration"></span>
-              <el-date-picker
-              v-model="queryParams.dataRange"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
+          <div class="block" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+            <span class="demonstration" >日期选择</span>
+            <el-date-picker v-model="value1" 
+            type="daterange" 
+            range-separator="至" 
+            start-placeholder="开始日期"
               end-placeholder="结束日期">
-              </el-date-picker>
-            </div>
-          </el-form-item>
+            </el-date-picker>
+          </div>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="getList">搜索</el-button>
           </el-form-item>
@@ -132,9 +128,7 @@ export default {
         pageSize: 10,
         keyWord: undefined,
         status: 0,
-        engine: 0,
-        dataRange:undefined 
-
+        engine: 0
       },
       title: '',
       // 是否显示弹出层

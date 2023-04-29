@@ -133,7 +133,7 @@ export default {
         keyWord: undefined,
         status: 0,
         engine: 0,
-        dataRange:undefined 
+        dataRange{}: 
 
       },
       title: '',

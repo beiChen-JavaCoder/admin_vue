@@ -23,7 +23,7 @@
               <el-option :key="5" label="linkedin" :value="5" />
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="dataRange">
+          <el-form-item label="日期选择" prop="data">
             <div class="block">
               <span class="demonstration"></span>
               <el-date-picker
@@ -133,7 +133,7 @@ export default {
         keyWord: undefined,
         status: 0,
         engine: 0,
-        dataRange:undefined 
+        data: undefined
 
       },
       title: '',
