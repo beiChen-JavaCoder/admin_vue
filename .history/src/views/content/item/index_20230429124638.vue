@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
 
+
     <el-row :gutter="20">
       <el-col :span="24" :xs="24">
         <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
@@ -17,11 +18,11 @@
           <el-form-item label="数据类型" prop="engine">
             <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList">
               <el-option :key="0" label="全部" :value="0" />
-              <!-- <el-option :key="1" label="facebook" :value="1" />
+              <el-option :key="1" label="facebook" :value="1" />
               <el-option :key="2" label="google" :value="2" />
               <el-option :key="3" label="twitter" :value="3" />
               <el-option :key="4" label="reddit" :value="4" />
-              <el-option :key="5" label="linkedin" :value="5" /> -->
+              <el-option :key="5" label="linkedin" :value="5" />
             </el-select>
           </el-form-item>
           <el-form-item label="日期选择" prop="dataRange">
@@ -70,7 +71,7 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="标题" width="aotu" class="tooltip" prop="title" header-align="center" align="left">
+      <el-table-column label="标题" width="aotu" prop="title" header-align="center" align="left">
       </el-table-column>
       <el-table-column label="摘要翻译" prop="snippet" width="aotu" header-align="center" align="left">
       </el-table-column>
@@ -81,6 +82,7 @@
           <a :href="scope.row.link" style="color: #409eff;" target="_blank">查看</a>
         </template>
       </el-table-column>
+
     </el-table>
 
     <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
@@ -108,34 +110,6 @@ hr {
   border: none;
   border-top: 1px dashed #ccc;
   margin: 10px 0;
-}
-
-/* Tooltip 容器 */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-  /* 悬停元素上显示点线 */
-}
-
-/* Tooltip 文本 */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-
-  /* 定位 */
-  position: absolute;
-  z-index: 1;
-}
-
-/* 鼠标移动上去后显示提示框 */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
 }
 </style>
 <script>

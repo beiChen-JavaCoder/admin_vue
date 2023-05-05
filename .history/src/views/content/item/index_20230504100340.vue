@@ -15,13 +15,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="数据类型" prop="engine">
-            <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList">
+            <el-select label="全部" v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList">
               <el-option :key="0" label="全部" :value="0" />
-              <!-- <el-option :key="1" label="facebook" :value="1" />
+              <el-option :key="1" label="facebook" :value="1" />
               <el-option :key="2" label="google" :value="2" />
               <el-option :key="3" label="twitter" :value="3" />
               <el-option :key="4" label="reddit" :value="4" />
-              <el-option :key="5" label="linkedin" :value="5" /> -->
+              <el-option :key="5" label="linkedin" :value="5" />
             </el-select>
           </el-form-item>
           <el-form-item label="日期选择" prop="dataRange">

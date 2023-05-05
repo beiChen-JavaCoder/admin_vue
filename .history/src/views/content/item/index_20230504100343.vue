@@ -15,7 +15,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="数据类型" prop="engine">
-            <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList">
+            <el-select label="全部" v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList">
               <el-option :key="0" label="全部" :value="0" />
               <!-- <el-option :key="1" label="facebook" :value="1" />
               <el-option :key="2" label="google" :value="2" />
