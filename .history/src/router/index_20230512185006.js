@@ -67,16 +67,6 @@ export const constantRoutes = [
       }]
     },
     {
-      path: '/content/item',
-      component: Layout,
-      children: [{
-        path: '/',
-        name: 'item',
-        component: () => import('@/views/content/item'),
-        hidden: true
-      }]
-    },
-    {
       path: '/system/menu',
       component: Layout,
       children: [{
@@ -85,9 +75,19 @@ export const constantRoutes = [
         component: () => import('@/views/system/menu'),
         hidden: true
       }]
+    },
+    {
+      path: '/content/item',
+      component: Layout,
+      children: [{
+        path: '/',
+        name: 'item',
+        component: () => import('@/views/content/item'),
+        hidden: true
+      }]
     }]
 
-  }
+  
 ]
 
 const createRouter = () => new Router({

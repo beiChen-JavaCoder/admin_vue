@@ -45,49 +45,13 @@ export const constantRoutes = [
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
-    },
-    {
-      path: '/system/user',
-      component: Layout,
-      children: [{
-        path: '/',
-        name: 'User',
-        component: () => import('@/views/system/user'),
-        hidden: true
-      }]
-    },
-    {
-      path: '/system/role',
-      component: Layout,
-      children: [{
-        path: '/',
-        name: 'role',
-        component: () => import('@/views/system/role'),
-        hidden: true
-      }]
-    },
-    {
-      path: '/content/item',
-      component: Layout,
-      children: [{
-        path: '/',
-        name: 'item',
-        component: () => import('@/views/content/item'),
-        hidden: true
-      }]
-    },
-    {
-      path: '/system/menu',
-      component: Layout,
-      children: [{
-        path: '/',
-        name: 'menu',
-        component: () => import('@/views/system/menu'),
-        hidden: true
-      }]
     }]
-
   }
+  // {
+  //   path: '/write',
+  //   component: () => import('@/views/content/article/write/index'),
+  //   hidden: true
+  // }
 ]
 
 const createRouter = () => new Router({

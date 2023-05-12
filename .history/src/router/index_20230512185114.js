@@ -65,7 +65,7 @@ export const constantRoutes = [
         component: () => import('@/views/system/role'),
         hidden: true
       }]
-    },
+      ,
     {
       path: '/content/item',
       component: Layout,
@@ -75,6 +75,7 @@ export const constantRoutes = [
         component: () => import('@/views/content/item'),
         hidden: true
       }]
+    }
     },
     {
       path: '/system/menu',
