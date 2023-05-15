@@ -42,7 +42,7 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'dashboard',
+      name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
@@ -77,17 +77,7 @@ export const constantRoutes = [
       hidden: true
     }]
   },
-  {
-    path: '/content/item',
-    component: Layout,
-    children: [{
-      path: '/',
-      name: 'item',
-      component: () => import('@/views/content/item/index'),
-      hidden: true
-    }]
-  }
-
+  
 ]
 
 const createRouter = () => new Router({

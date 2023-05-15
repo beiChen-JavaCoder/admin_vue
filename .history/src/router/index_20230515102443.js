@@ -42,7 +42,7 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'dashboard',
+      name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
@@ -78,12 +78,12 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/content/item',
+    path: '/con',
     component: Layout,
     children: [{
       path: '/',
-      name: 'item',
-      component: () => import('@/views/content/item/index'),
+      name: 'menu',
+      component: () => import('@/views/system/menu'),
       hidden: true
     }]
   }

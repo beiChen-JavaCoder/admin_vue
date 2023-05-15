@@ -42,7 +42,7 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'dashboard',
+      name: '首页',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
@@ -57,37 +57,6 @@ export const constantRoutes = [
       hidden: true
     }]
   },
-  {
-    path: '/system/role',
-    component: Layout,
-    children: [{
-      path: '/',
-      name: 'role',
-      component: () => import('@/views/system/role'),
-      hidden: true
-    }]
-  },
-  {
-    path: '/system/menu',
-    component: Layout,
-    children: [{
-      path: '/',
-      name: 'menu',
-      component: () => import('@/views/system/menu'),
-      hidden: true
-    }]
-  },
-  {
-    path: '/content/item',
-    component: Layout,
-    children: [{
-      path: '/',
-      name: 'item',
-      component: () => import('@/views/content/item/index'),
-      hidden: true
-    }]
-  }
-
 ]
 
 const createRouter = () => new Router({
