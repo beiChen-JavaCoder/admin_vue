@@ -6,7 +6,7 @@
         <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
           <el-form-item label="模糊搜索" prop="keyword">
             <el-input v-model="queryParams.keyword" placeholder="请输入摘要关键字" clearable size="small" style="width: 240px"
-              @keyup.enter.native="getList" />
+              @keyup.enter.native="getList" @blur="getList"  />
           </el-form-item>
           <el-form-item label="数据状态" prop="status">
             <el-select v-model="queryParams.status" placeholder="" clearable size="small">
@@ -15,7 +15,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="数据类型" prop="engine">
-            <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList">
+            <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList" @blur="getList">
               <el-option :key="0" label="全部" :value="0" />
               <!-- <el-option :key="1" label="facebook" :value="1" />
               <el-option :key="2" label="google" :value="2" />
@@ -24,11 +24,11 @@
               <el-option :key="5" label="linkedin" :value="5" /> -->
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="dataRange">
+          <el-form-item label="日期选择" prop="dataRange" >
             <div class="block">
               <span class="demonstration"></span>
               <el-date-picker v-model="queryParams.dataRange" value-format="yyyy-MM-dd" type="daterange"
-                range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @blur="getList">
               </el-date-picker>
             </div>
           </el-form-item>
@@ -83,8 +83,12 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-      :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
+    <el-pagination 
+      :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      :page-sizes="[10, 20, 30, 40]"
+      :current-page.sync="queryParams.pageNum"
+      @current-change="getList"
       @size-change="getList" />
   </div>
 </template>
@@ -142,7 +146,7 @@ hr {
 import {
   listItem
 }
-  from '@/api/content/item'
+from '@/api/content/item'
 
 export default {
   name: 'Item',
