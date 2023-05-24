@@ -4,9 +4,10 @@
     <el-row :gutter="20">
       <el-col :span="24" :xs="24">
         <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+
           <el-form-item label="模糊搜索" prop="keyword">
             <el-input v-model="queryParams.keyword" placeholder="请输入摘要关键字" clearable size="small" style="width: 240px"
-              @keyup.enter.native="getList" @blur="getList"  />
+              @keyup.enter.native="getList" @blur="getList" />
           </el-form-item>
           <el-form-item label="数据状态" prop="status">
             <el-select v-model="queryParams.status" placeholder="" clearable size="small">
@@ -15,7 +16,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="数据类型" prop="engine">
-            <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList" @blur="getList">
+            <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList"
+              @blur="getList">
               <el-option :key="0" label="全部" :value="0" />
               <!-- <el-option :key="1" label="facebook" :value="1" />
               <el-option :key="2" label="google" :value="2" />
@@ -24,7 +26,7 @@
               <el-option :key="5" label="linkedin" :value="5" /> -->
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="dataRange" >
+          <el-form-item label="日期选择" prop="dataRange">
             <div class="block">
               <span class="demonstration"></span>
               <el-date-picker v-model="queryParams.dataRange" value-format="yyyy-MM-dd" type="daterange"
@@ -70,9 +72,20 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="标题" width="aotu" class="tooltip" prop="title" header-align="center" align="left">
+      <el-table-column label="标题" width="aotu" prop="title" header-align="center" align="left">
+        <template slot-scope="scope">
+          <el-tooltip :content="scope.row.title" placement="top">
+            <div class="tooltip">{{ scope.row.title }}
+            </div>
+          </el-tooltip>
+        </template>
       </el-table-column>
-      <el-table-column label="摘要翻译" prop="snippet" width="aotu" header-align="center" align="left">
+      <el-table-column label="摘要翻译" class="tooltip" prop="snippet" width="aotu" header-align="center" align="left">
+        <template slot-scope="scope">
+          <el-tooltip :content="scope.row.snippet" placement="top">
+            <div class="tooltip">{{ scope.row.snippet }}</div>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column label="收录时间" prop="time" width="160px" align="center">
       </el-table-column>
@@ -83,12 +96,8 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination 
-      :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      :page-sizes="[10, 20, 30, 40]"
-      :current-page.sync="queryParams.pageNum"
-      @current-change="getList"
+    <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+      :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
       @size-change="getList" />
   </div>
 </template>
@@ -118,7 +127,7 @@ hr {
 .tooltip {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black;
+
   /* 悬停元素上显示点线 */
 }
 
@@ -131,7 +140,6 @@ hr {
   text-align: center;
   padding: 5px 0;
   border-radius: 6px;
-
   /* 定位 */
   position: absolute;
   z-index: 1;
