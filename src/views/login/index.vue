@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
       label-position="left">
       <div class="title-container">
-        <h3 class="title" style="color: black;">欢迎来到海外问卷实时采集系统</h3>
+        <h3 class="title" style="color: black;">后台管理系统</h3>
         <h3 class="title" style="color: black;">登录</h3>
 
       </div>

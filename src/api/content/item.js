@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 
-// 查询问卷列表
+// 查询商户列表
 export function listItem(query) {
   return request({
     url: '/item/list',
@@ -11,7 +11,7 @@ export function listItem(query) {
 }
 
 
-// 删除问卷
+// 删除商户
 export function delArticle(id) {
   return request(
   {

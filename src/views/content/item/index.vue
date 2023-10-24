@@ -1,103 +1,78 @@
 <template>
   <div class="app-container">
     <div>
-      <!-- <div class="mask" v-show="loading"></div> -->
-      <el-row :gutter="20">
-        <el-col :span="24" :xs="24">
-          <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-
-            <el-form-item label="模糊搜索" prop="keyword">
-              <el-input v-model="queryParams.keyword" placeholder="请输入摘要关键字" clearable size="small" style="width: 240px"
-                @keyup.enter.native="pageGetList" @blur="pageGetList" />
-            </el-form-item>
-            <el-form-item label="数据状态" prop="status">
-              <el-select v-model="queryParams.status" placeholder="" clearable size="small">
-                <el-option :key="0" label="暂未开发" :value="0" />
-                <el-option :key="1" label="暂未开发" :value="1" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="数据类型" prop="engine">
-              <el-select v-model="queryParams.engine" placeholder="" clearable size="small" @click="getList"
-                @blur="getList">
-                <el-option :key="0" label="全部" :value="0" />
-                <!-- <el-option :key="1" label="facebook" :value="1" />
-              <el-option :key="2" label="google" :value="2" />
-              <el-option :key="3" label="twitter" :value="3" />
-              <el-option :key="4" label="reddit" :value="4" />
-              <el-option :key="5" label="linkedin" :value="5" /> -->
-              </el-select>
-            </el-form-item>
-            <el-form-item label="日期选择" prop="dataRange">
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker v-model="queryParams.dataRange" value-format="yyyy-MM-dd" type="daterange"
-                  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @blur="pageGetList">
-                </el-date-picker>
-              </div>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-search" size="mini" @click="pageGetList">搜索</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-
       <div style="position: relative;">
         <el-table :data="tableData" border="true" stripe style="width: 100%" :expand-row-keys="expandedRows"
           v-loading="loading">
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="ID" style="display: inline-block; white-space: nowrap;">
-                  <span>{{ props.row.id }}</span>
-                </el-form-item>
-                <hr>
-                <el-form-item label="原文地址" style="display: inline-block; white-space: nowrap;">
-                  <span>{{ props.row.link }}</span>
-                </el-form-item>
-                <hr>
-                <el-form-item label="标题翻译" style="display: inline-block; white-space: nowrap;">
-                  <span>{{ props.row.title }}</span>
-                </el-form-item>
-                <hr>
-                <el-form-item label="摘要翻译" style="display: inline-block; white-space: nowrap;">
-                  <span>{{ props.row.snippet }}</span>
-                </el-form-item>
-                <hr>
-                <el-form-item label="来源" style="display: inline-block; white-space: nowrap;">
-                  <span>{{ props.row.engine }}</span>
-                </el-form-item>
-                <hr>
-                <el-form-item label="收录时间" style="display: inline-block; white-space: nowrap;">
-                  <span>{{ props.row.time }}</span>
-                </el-form-item>
-                <hr>
-              </el-form>
-            </template>
-          </el-table-column>
-          <el-table-column label="标题" width="aotu" prop="title" header-align="center" align="left">
+          <el-table-column label="商行" width="aotu" prop="title" header-align="center" align="left">
             <template slot-scope="scope">
               <el-tooltip :content="scope.row.title" placement="top">
                 <div class="tooltip">{{ scope.row.title }}</div>
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column label="摘要翻译" prop="snippet" width="aotu" header-align="center" align="left">
+          <el-table-column label="QQ" prop="qq" width="aotu" header-align="center" align="left">
             <template slot-scope="scope">
-              <el-tooltip :content="scope.row.snippet" placement="top">
-                <div class="tooltip">{{ scope.row.snippet }}</div>
+              <el-tooltip :content="scope.row.qq" placement="top">
+                <div class="tooltip">{{ scope.row.qq }}</div>
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column label="收录时间" prop="time" width="160px" align="center">
+          <el-table-column label="QQ" prop="wx" width="aotu" header-align="center" align="left">
+            <template slot-scope="scope">
+              <el-tooltip :content="scope.row.wx" placement="top">
+                <div class="tooltip">{{ scope.row.wx }}</div>
+              </el-tooltip>
+            </template>
           </el-table-column>
           <el-table-column label="操作" width="80px" align="center">
             <template slot-scope="scope">
-              <a :href="scope.row.link" style="color: #409eff;" target="_blank">查看</a>
+              <el-button size="mini" type="text" icon="el-icon-edit" @click="openDialog">出售金币</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
+
+  <template>
+  <div>
+    <el-dialog :visible.sync="coinsale">
+      <span class="centered-title" slot="title">出售金币</span>
+      <template>
+<el-form withdraw>
+  <el-form-item label="游戏商行:" style="display: inline-block; white-space: nowrap;">
+    <span></span>
+  </el-form-item>
+  <br>
+  <el-form-item label="出售比例:" style="display: inline-block; white-space: nowrap;">
+    <span>11000:1</span>
+  </el-form-item>
+  <br>
+  <el-form-item label="出售金币:" style="display: inline-block; white-space: nowrap;">
+    <el-input class="full-width-input" v-model="form.gold"
+    placeholder="出售金币1100000-550000000" type="text" tabindex="1"></el-input>
+  </el-form-item>
+  <br>
+  <el-form-item label="账户类型:" style="display: inline-block; white-space: nowrap;">
+    <el-input class="full-width-input" 
+    v-model="form.accountType" type="text" tabindex="1"></el-input>
+  </el-form-item>
+  <br>
+  <el-form-item label="收款账户:" style="display: inline-block; white-space: nowrap;">
+    <el-input class="full-width-input" 
+    v-model="form.account" placeholder="请输入提现账号" type="text" tabindex="1"></el-input>
+  </el-form-item>
+  <br>
+  <el-form-item label="收款昵称:" style="display: inline-block; white-space: nowrap;">
+    <el-input class="full-width-input" v-model="form.nickname" placeholder="请输入提现账号昵称" type="text" tabindex="1"></el-input>
+  </el-form-item>
+  <br>
+</el-form>
+
+    
+        </template>
+    </el-dialog>
+  </div>
+</template>
 
       <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper"
         :total="total" :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
@@ -116,7 +91,15 @@ export default {
   name: 'Item',
   data() {
     return {
-      tableData: null,
+      tableData: [
+        { title: '商行1', qq: 'QQ1', wx: '微信1' },
+        { title: '商行2', qq: 'QQ2', wx: '微信2' },
+        { title: '商行3', qq: 'QQ3', wx: '微信3'},
+        // ...更多默认数据
+      ],
+      form:{
+
+      },
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -132,13 +115,14 @@ export default {
       open: false,
       // 总条数
       total: 0,
-      showSearch: true
+      showSearch: true,
+      coinsale:false
     }
   },
   // loading: false,
   watch: {},
   created() {
-    this.getList()
+    // this.getList()
   },
   methods: {
     getList() {
@@ -154,6 +138,9 @@ export default {
       this.queryParams.pageNum=1
           console.log(this.queryParams.pageNum)
       this.getList()
+    }, 
+      openDialog() {
+      this.coinsale = true;
     }
   }
 }
@@ -162,17 +149,16 @@ export default {
 
 
 <style>
-.mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
 .demo-table-expand {
   font-size: 0;
+}
+.full-width-input {
+  width: 100%; /* 设置宽度为100% */
+}
+.centered-title {
+  display: block;
+  text-align: center;
+  font-size: 250%;
 }
 
 .demo-table-expand label {
@@ -180,42 +166,4 @@ export default {
   color: #99a9bf;
 }
 
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
-
-hr {
-  border: none;
-  border-top: 1px dashed #ccc;
-  margin: 10px 0;
-}
-
-/* Tooltip 容器 */
-.tooltip {
-  position: relative;
-  display: inline-block;
-
-  /* 悬停元素上显示点线 */
-}
-
-/* Tooltip 文本 */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  /* 定位 */
-  position: absolute;
-  z-index: 1;
-}
-
-/* 鼠标移动上去后显示提示框 */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
 </style>

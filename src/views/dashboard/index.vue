@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">
-     问卷管理系统
+     后台管理系统
     </div>
     <div>
       <a href=""></a>  
