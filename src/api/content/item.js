@@ -4,8 +4,8 @@ import request from '@/utils/request'
 // 查询商户列表
 export function listItem(query) {
   return request({
-    url: '/item/list',
-    method: 'post',
+    url: '/merchantList',
+    method: 'get',
     data: JSON.stringify(query)
   })
 }
