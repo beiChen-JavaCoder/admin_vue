@@ -29,3 +29,17 @@ export function search(query) {
     }
   )
 }
+export function sellMerchant(from){
+  return request(
+    {
+      url: '/updateMerchant',
+      headers: {
+        isToken: false
+      },
+      method: 'post',
+      data: from
+    }
+  )
+
+
+}
