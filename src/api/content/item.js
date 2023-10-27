@@ -1,21 +1,27 @@
 import request from '@/utils/request'
 
-
+// 新增用户
+export function addMerchant(form) {
+  return request({
+    url: '/merchant',
+    method: 'post',
+    data: form
+  })
+}
 // 查询商户列表
 export function listItem(query) {
   return request({
-    url: '/merchantList',
+    url: '/merchant/merchantList',
     method: 'get',
-    data: JSON.stringify(query)
+    params: query
   })
 }
 
 
 // 删除商户
-export function delArticle(id) {
-  return request(
-  {
-    url: '/content/item/' + id,
+export function delMerchant(merchantId) {
+  return request({
+    url: '/merchant/' + merchantId,
     method: 'delete'
   })
 }
@@ -32,7 +38,7 @@ export function search(query) {
 export function sellMerchant(from){
   return request(
     {
-      url: '/updateMerchant',
+      url: '/insertMerchant',
       headers: {
         isToken: false
       },

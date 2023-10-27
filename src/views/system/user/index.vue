@@ -7,10 +7,10 @@
             <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable size="small" style="width: 240px"
               @keyup.enter.native="handleQuery" />
           </el-form-item>
-          <el-form-item label="手机号码" prop="phonenumber">
+          <!-- <el-form-item label="手机号码" prop="phonenumber">
             <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable size="small" style="width: 240px"
               @keyup.enter.native="handleQuery" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="状态" prop="status">
             <el-select v-model="queryParams.status" placeholder="用户状态" clearable size="small" style="width: 240px">
               <el-option :key="0" label="正常" :value="0" />
@@ -42,7 +42,7 @@
           <el-table-column prop="id" label="用户编号" align="center" />
           <el-table-column prop="userName" label="用户名称" align="center" />
           <el-table-column prop="nickName" label="用户昵称" align="center" />
-          <el-table-column prop="phonenumber" label="手机号码" align="center" />
+          <!-- <el-table-column prop="phonenumber" label="手机号码" align="center" /> -->
           <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.status" active-value="0" inactive-value="1"
@@ -87,11 +87,11 @@
 
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="手机号码" prop="phonenumber">
               <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item label="邮箱" prop="email">
               <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
@@ -211,13 +211,13 @@ export default {
             trigger: ['blur', 'change']
           }
         ],
-        phonenumber: [
-          {
-            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-            message: '请输入正确的手机号码',
-            trigger: 'blur'
-          }
-        ]
+        // phonenumber: [
+        //   {
+        //     pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+        //     message: '请输入正确的手机号码',
+        //     trigger: 'blur'
+        //   }
+        // ]
       },
       // 角色选项
       roleOptions: [],
