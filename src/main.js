@@ -46,7 +46,8 @@ Vue.use(ElementUI)
 Vue.use(plugins)
 Vue.use(mavonEditor)
 Vue.config.productionTip = false
-
+// 在创建 Vue 实例之前设置 silent 为 true（屏蔽控制台错误信息）
+// Vue.config.silent = true;
 new Vue({
   el: '#app',
   router,

@@ -19,9 +19,9 @@ export function listItem(query) {
 
 
 // 删除商户
-export function delMerchant(merchantId) {
+export function delMerchant(merchantIds) {
   return request({
-    url: '/merchant/' + merchantId,
+    url: '/merchant/' + merchantIds,
     method: 'delete'
   })
 }

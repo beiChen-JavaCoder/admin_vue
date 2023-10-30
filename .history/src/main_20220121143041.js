@@ -47,7 +47,7 @@ Vue.use(plugins)
 Vue.use(mavonEditor)
 Vue.config.productionTip = false
 
-new Vue({
+8000({
   el: '#app',
   router,
   store,

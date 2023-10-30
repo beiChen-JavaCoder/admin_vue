@@ -16,10 +16,13 @@
             <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="openDialog">新增</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="handleDelete">删除</el-button>
+            <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="ids.length === 0" @click="handleDelete">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="tableData" stripe style="width: 100%" :expand-row-keys="expandedRows" v-loading="loading">
+        <el-table :data="tableData" stripe style="width: 100%" 
+        :expand-row-keys="expandedRows" 
+        v-loading="loading" 
+        @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />
           <el-table-column prop="id" label="商行编号" align="center" />
           <el-table-column label="商行" prop="merchant" align="center">
@@ -88,7 +91,7 @@
 
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm">确 定</el-button>
+            <el-button type="primary" @click="submitForm(form)">确 定</el-button>
             <el-button @click="cancel">取 消</el-button>
           </div>
         </el-dialog>
@@ -134,9 +137,9 @@
           </el-form>
         </el-dialog> -->
       </div>
-      <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper"
-        :total="total" :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
-        @size-change="getList" />
+      <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+      :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
+      @size-change="getList" />
     </div>
   </div>
 </template>
@@ -158,6 +161,8 @@ export default {
       value: '',
       tableData: [
       ],
+      // 选中数组
+      ids: [],
       // 表单参数
       form: {},
       // 查询参数
@@ -165,7 +170,6 @@ export default {
         name: undefined,
         pageNum: 1,
         pageSize: 10,
-        status: 0,
         dataRange: undefined
 
       },
@@ -203,6 +207,12 @@ export default {
   },
 
   methods: {
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
+    },
     getList() {
       listItem(this.queryParams).then((response) => {
         this.tableData = response.rows
@@ -217,6 +227,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
+
       const ids = row.id || this.ids
       this.$modal
         .confirm('是否确认删除用户编号为"' + ids + '"的数据项？')
@@ -230,8 +241,17 @@ export default {
         .catch(() => { })
     },
     /** 新增商户 */
-    submitForm() {
-      addMerchant(this.form)
+    submitForm(form) {
+      this.$modal
+        .confirm("是否新增商户" + form.name)
+        .then(function () {
+          return addMerchant(form)
+        })
+        .then(() => {
+          this.getList()
+          this.$modal.msgSuccess('新增成功')
+        })
+        .catch(() => { })
       this.coinsale= false;
     },
     // 取消按钮
