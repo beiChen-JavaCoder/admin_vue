@@ -7,10 +7,6 @@
             <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable size="small" style="width: 240px"
               @keyup.enter.native="handleQuery" />
           </el-form-item>
-          <!-- <el-form-item label="手机号码" prop="phonenumber">
-            <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable size="small" style="width: 240px"
-              @keyup.enter.native="handleQuery" />
-          </el-form-item> -->
           <el-form-item label="状态" prop="status">
             <el-select v-model="queryParams.status" placeholder="用户状态" clearable size="small" style="width: 240px">
               <el-option :key="0" label="正常" :value="0" />
@@ -87,11 +83,6 @@
 
         </el-row>
         <el-row>
-          <!-- <el-col :span="12">
-            <el-form-item label="手机号码" prop="phonenumber">
-              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
-            </el-form-item>
-          </el-col> -->
           <el-col :span="12">
             <el-form-item label="邮箱" prop="email">
               <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
@@ -141,10 +132,47 @@
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" :disabled="!isFormValid" @click="handleAddMerchent">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+        <!-- 添加或修改参数配置对话框(商户信息) -->
+        <el-dialog title="绑定商户信息" :visible.sync="openMerchant" width="600px" append-to-body>
+          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="商户名称" prop="name">
+                  <el-input v-model="form.name" placeholder="请输入商户名" maxlength="30" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="QQ" prop="qq">
+                  <el-input v-model="form.qq" placeholder="请输入QQ" maxlength="30" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="微信" prop="wx">
+                  <el-input v-model="form.wx" placeholder="请输入微信" maxlength="30" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="YY" prop="wx">
+                  <el-input v-model="form.yy" placeholder="请输入YY" maxlength="30" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="提现比例" prop="ratio">
+                  <el-input v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" :disabled="!isFormValid" @click="submitForm(form)">确 定</el-button>
+            <el-button @click="cancel">取 消</el-button>
+          </div>
+        </el-dialog>
   </div>
 </template>
 
@@ -181,6 +209,7 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      openMerchant:false,
       // 表单校验
       rules: {
         userName: [
@@ -203,22 +232,15 @@ export default {
             message: '用户密码长度必须介于 5 和 20 之间',
             trigger: 'blur'
           }
-        ],
-        email: [
-          {
-            type: 'email',
-            message: "'请输入正确的邮箱地址",
-            trigger: ['blur', 'change']
-          }
-        ],
-        // phonenumber: [
-        //   {
-        //     pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-        //     message: '请输入正确的手机号码',
-        //     trigger: 'blur'
-        //   }
-        // ]
+        ]
       },
+      valid: {
+      // 表示每个表单字段是否已验证通过
+      userName: false,
+      nickName: false,
+      password: false
+      // 其他表单字段
+    },
       // 角色选项
       roleOptions: [],
       // 显示搜索条件
@@ -239,6 +261,11 @@ export default {
   created() {
     this.getList()
   },
+  computed: {
+  isFormValid() {
+    return this.$refs.form && this.$refs.form.validate();
+  }
+},
   methods: {
     //当焦点离开更新表单密码
     handleBlur() {
@@ -321,6 +348,12 @@ export default {
         this.open = true
         this.title = '添加用户'
       })
+    },
+    /** 新增商户 */
+    handleAddMerchent(){
+      this.openMerchant=true
+      this.title = '绑定商户信息'
+      this.handleAdd()
     },
     /** 删除按钮操作 */
     handleDelete(row) {

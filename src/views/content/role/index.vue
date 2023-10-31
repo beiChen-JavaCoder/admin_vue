@@ -11,15 +11,6 @@
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
           </el-form-item>
         </el-form>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="openDialog">新增</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="ids.length === 0"
-              @click="handleDelete">删除</el-button>
-          </el-col>
-        </el-row>
         <el-table :data="tableData" stripe style="width: 100%" :expand-row-keys="expandedRows" v-loading="loading"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />

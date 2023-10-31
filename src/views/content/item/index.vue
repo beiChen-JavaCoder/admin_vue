@@ -13,7 +13,7 @@
         </el-form>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="openDialog">新增</el-button>
+            <el-button type="primary" plain icon="el-icon-plus" :disabled="false" size="mini" @click="openDialog">新增</el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="ids.length === 0" @click="handleDelete">删除</el-button>

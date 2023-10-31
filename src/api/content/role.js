@@ -12,7 +12,7 @@ export function listRole(query) {
 // 充值金币
 export function updategold(form) {
     return request({
-      url: '/recharge/updategold',
+      url: '/recharge/updateGold',
       method: 'post',
       data: form
     })
