@@ -63,9 +63,17 @@
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="用户昵称" prop="nickName">
               <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-radio-group v-model="form.status">
+                <el-radio :key="'0'" :label="'0'">正常</el-radio>
+                <el-radio :key="'1'" :label="'1'">停用</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="18">
@@ -77,15 +85,6 @@
                   选择
                 </el-checkbox>
               </div>
-            </el-form-item>
-          </el-col>
-
-
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -103,76 +102,56 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户性别">
-              <el-select v-model="form.sex" placeholder="请选择">
-                <el-option :key="'0'" label="男" :value="'0'" />
-                <el-option :key="'1'" label="女" :value="'1'" />
-                <el-option :key="'2'" label="未知" :value="'2'" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio :key="'0'" :label="'0'">正常</el-radio>
-                <el-radio :key="'1'" :label="'1'">停用</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
             <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择" @change="handleChange">
                 <el-option v-for="item in roleOptions" :key="item.id" :label="item.roleName" :value="item.id"
                   :disabled="item.status == 1" />
               </el-select>
             </el-form-item>
-          </el-col></el-row>
-
+          </el-col>
+        </el-row>
+        <div v-if="!merchantReveal">
+          <el-row>
+            <div class="dialog-header">
+              <div class="dialog-header-title" style="font-size: inherit; font-weight: inherit; color: inherit;">绑定商户信息
+              </div>
+            </div>
+            <br>
+            <el-col :span="12">
+              <el-form-item label="商户名称" prop="merchantName">
+                <el-input v-model="form.merchantName" placeholder="请输入商户名" maxlength="30" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="提现比例" prop="ratio">
+                <el-input v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="QQ" prop="qq">
+                <el-input v-model="form.qq" placeholder="请输入QQ" maxlength="30" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="微信" prop="wx">
+                <el-input v-model="form.wx" placeholder="请输入微信" maxlength="30" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="YY" prop="wx">
+                <el-input v-model="form.yy" placeholder="请输入YY" maxlength="30" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :disabled="!isFormValid" @click="handleAddMerchent">确 定</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-        <!-- 添加或修改参数配置对话框(商户信息) -->
-        <el-dialog title="绑定商户信息" :visible.sync="openMerchant" width="600px" append-to-body>
-          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="商户名称" prop="name">
-                  <el-input v-model="form.name" placeholder="请输入商户名" maxlength="30" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="QQ" prop="qq">
-                  <el-input v-model="form.qq" placeholder="请输入QQ" maxlength="30" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="微信" prop="wx">
-                  <el-input v-model="form.wx" placeholder="请输入微信" maxlength="30" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="YY" prop="wx">
-                  <el-input v-model="form.yy" placeholder="请输入YY" maxlength="30" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="提现比例" prop="ratio">
-                  <el-input v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" :disabled="!isFormValid" @click="submitForm(form)">确 定</el-button>
-            <el-button @click="cancel">取 消</el-button>
-          </div>
-        </el-dialog>
   </div>
 </template>
 
@@ -203,44 +182,58 @@ export default {
         pageSize: 10,
         userName: undefined,
         password: undefined,
-        phonenumber: undefined,
         status: undefined
       },
+      //控制商户对话框显示
+      merchantReveal: true,
       title: '',
       // 是否显示弹出层
       open: false,
-      openMerchant:false,
+      openMerchant: false,
       // 表单校验
       rules: {
         userName: [
-          { required: true, message: '用户名称不能为空', trigger: 'blur' },
-          {
-            min: 2,
-            max: 20,
-            message: '用户名称长度必须介于 2 和 20 之间',
-            trigger: 'blur'
-          }
+          { required: true, message: "用户名称不能为空", trigger: "blur" },
+          { min: 5, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur' }
         ],
         nickName: [
-          { required: true, message: '用户昵称不能为空', trigger: 'blur' }
+          { required: true, message: "用户昵称不能为空", trigger: "blur" },
+          { min: 5, max: 10, message: '用户昵称长度必须介于 5 和 10 之间', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '用户密码不能为空', trigger: 'blur' },
-          {
-            min: 5,
-            max: 20,
-            message: '用户密码长度必须介于 5 和 20 之间',
-            trigger: 'blur'
-          }
+          { required: true, message: "用户密码不能为空", trigger: "blur" },
+          { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
+        ],
+        merchantName: [
+          { required: true, message: '请输入商户名', trigger: 'blur' },
+          { min: 5, max: 10, message: '商户名长度必须介于 5 和 10 之间', trigger: 'blur' }
+
+        ],
+        qq: [
+          { required: false, message: '请输入QQ账号', trigger: 'blur' },
+          { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' },
+          { min: 5, max: 10, message: 'QQ长度必须介于 5 和 10 之间', trigger: 'blur' }
+
+        ],
+        wx: [
+          { required: false, message: '请输入微信号', trigger: 'blur' },
+          { pattern: /^[a-zA-Z0-9]+$/, message: '请输入数字或字母', trigger: 'blur' },
+          { min: 5, max: 15, message: '微信号长度必须介于 5 和 10 之间', trigger: 'blur' }
+
+        ],
+        yy: [
+          { required: false, message: '请输入YY号', trigger: 'blur' },
+          { pattern: /^[a-zA-Z0-9]+$/, message: '请输入数字或字母', trigger: 'blur' },
+          { min: 5, max: 15, message: 'YY长度必须介于 5 和 10 之间', trigger: 'blur' }
+
+        ],
+        ratio: [
+          { required: true, message: '请选择账户提现比例', trigger: 'blur' },
+          { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' },
+          { min: 5, max: 15, message: '提现比例长度必须介于 1 和 5 之间', trigger: 'blur' }
         ]
       },
-      valid: {
-      // 表示每个表单字段是否已验证通过
-      userName: false,
-      nickName: false,
-      password: false
-      // 其他表单字段
-    },
+      
       // 角色选项
       roleOptions: [],
       // 显示搜索条件
@@ -254,22 +247,20 @@ export default {
       // 选中数组
       ids: [],
       // 表单参数
-      form: {}
+      form: {
+        merchantEntity: {}
+
+      }
     }
   },
   watch: {},
   created() {
     this.getList()
   },
-  computed: {
-  isFormValid() {
-    return this.$refs.form && this.$refs.form.validate();
-  }
-},
   methods: {
     //当焦点离开更新表单密码
     handleBlur() {
-      this.form.password=this.updatePassword
+      this.form.password = this.updatePassword
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -313,16 +304,24 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+
       this.reset()
       const id = row.id || this.ids
       getUser(id).then((response) => {
         this.form = response.user
         this.roleOptions = response.roles
         this.form.roleIds = response.roleIds
+        if (response.user.type == 1) {
+          this.merchantReveal = true
+        }
         this.open = true
         this.title = '修改用户'
         this.form.password = response.password
       })
+    },
+    handleChange(val) {
+      if (val == 1) {
+      }
     },
     // 表单重置
     reset() {
@@ -331,7 +330,6 @@ export default {
         userName: undefined,
         nickName: undefined,
         password: undefined,
-        sex: undefined,
         status: '0',
         remark: undefined,
         roleIds: []
@@ -340,18 +338,14 @@ export default {
     },
     /** 新增用户 */
     handleAdd() {
+      this.merchantReveal = false
       this.reset()
       listAllRole().then((response) => {
         this.roleOptions = response
         this.open = true
         this.title = '添加用户'
+
       })
-    },
-    /** 新增商户 */
-    handleAddMerchent(){
-      this.openMerchant=true
-      this.title = '绑定商户信息'
-      this.handleAdd()
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -390,3 +384,21 @@ export default {
   }
 }
 </script>
+<style>
+.dialog-header {
+  display: flex;
+  align-items: baseline;
+}
+
+.dialog-header .dialog-header-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.dialog-header .dialog-header-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+</style>
