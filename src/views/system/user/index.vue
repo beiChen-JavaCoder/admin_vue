@@ -331,8 +331,6 @@ export default {
         userName: undefined,
         nickName: undefined,
         password: undefined,
-        phonenumber: undefined,
-        email: undefined,
         sex: undefined,
         status: '0',
         remark: undefined,
