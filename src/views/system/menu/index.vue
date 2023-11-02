@@ -344,6 +344,7 @@ export default {
 
     /** 修改按钮操作 */
     handleUpdate(row) {
+      console.log(row)
       this.reset()
       this.getTreeselect()
       getMenu(row.id).then(response => {

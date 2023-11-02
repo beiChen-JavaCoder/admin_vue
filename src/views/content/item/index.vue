@@ -3,8 +3,8 @@
     <div>
       <div style="position: relative;">
         <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-          <el-form-item label="商行名称" prop="name">
-            <el-input v-model="queryParams.name" placeholder="请输入商行名称" clearable size="small" style="width: 240px"
+          <el-form-item label="商行名称" prop="merchantName">
+            <el-input v-model="queryParams.merchantName" placeholder="请输入商行名称" clearable size="small" style="width: 240px"
               @keyup.enter.native="handleQuery" />
           </el-form-item>
           <el-form-item>
@@ -27,8 +27,8 @@
           <el-table-column prop="id" label="商行编号" align="center" />
           <el-table-column label="商行" prop="merchant" align="center">
             <template slot-scope="scope">
-              <el-tooltip :content="scope.row.name" placement="top">
-                <div class="tooltip">{{ scope.row.name }}</div>
+              <el-tooltip :content="scope.row.merchantName" placement="top">
+                <div class="tooltip">{{ scope.row.merchantName }}</div>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -63,8 +63,8 @@
           <el-form ref="form" :model="form" :rules="rules" label-width="80px">
             <el-row>
               <el-col :span="24">
-                <el-form-item label="商户名称" prop="name">
-                  <el-input v-model="form.name" placeholder="请输入商户名" maxlength="30" />
+                <el-form-item label="商户名称" prop="merchantName">
+                  <el-input v-model="form.merchantName" placeholder="请输入商户名" maxlength="30" />
                 </el-form-item>
               </el-col>
               <el-col :span="24">
@@ -167,7 +167,7 @@ export default {
       form: {},
       // 查询参数
       queryParams: {
-        name: undefined,
+        merchantName: undefined,
         pageNum: 1,
         pageSize: 10,
         dataRange: undefined
@@ -181,7 +181,7 @@ export default {
       coinsale: false,
       //表单验证
       rules: {
-        name: [
+        merchantName: [
           { required: true, message: '请输入商户名', trigger: 'blur' },
         ],
         qq: [
@@ -243,7 +243,7 @@ export default {
     /** 新增商户 */
     submitForm(form) {
       this.$modal
-        .confirm("是否新增商户" + form.name)
+        .confirm("是否新增商户" + form.merchantName)
         .then(function () {
           return addMerchant(form)
         })

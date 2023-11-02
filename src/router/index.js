@@ -36,6 +36,7 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
+  //首页
   {
     path: '/',
     component: Layout,
@@ -47,6 +48,7 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+  //用户管理
   {
     path: '/system/user',
     component: Layout,
@@ -57,6 +59,7 @@ export const constantRoutes = [
       hidden: true
     }]
   },
+  //角色管理
   {
     path: '/system/role',
     component: Layout,
@@ -67,6 +70,7 @@ export const constantRoutes = [
       hidden: true
     }]
   },
+  //菜单管理
   {
     path: '/system/menu',
     component: Layout,
@@ -77,13 +81,47 @@ export const constantRoutes = [
       hidden: true
     }]
   },
+  //商户管理
   {
     path: '/content/item',
     component: Layout,
     children: [{
       path: '/',
       name: 'item',
-      component: () => import('@/views/content/item/index'),
+      component: () => import('@/views/content/item'),
+      hidden: true
+    }]
+  },
+  //血池控制
+  {
+    path: '/game/blood',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'blood',
+      component: () => import('@/views/game/blood'),
+      hidden: true
+    }]
+  },
+  //商户充值
+  {
+    path: '/content/role',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'role',
+      component: () => import('@/views/content/role'),
+      hidden: true
+    }]
+  },
+  //点对点
+  {
+    path: '/game/ptwop',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'ptwop',
+      component: () => import('@/views/game/ptwop'),
       hidden: true
     }]
   }
