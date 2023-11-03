@@ -95,47 +95,6 @@
             <el-button @click="cancel">取 消</el-button>
           </div>
         </el-dialog>
-        <!-- <el-dialog :visible.sync="coinsale">
-          <span slot="title" style="height: 100%; width: 150%;">出售金币</span>
-          <el-form ref="form" :model="form" :rules="rules" withdraw>
-            <el-form-item label="游戏商行:" style="display: inline-block; white-space: nowrap;">
-              <div>{{ form.name }}</div>
-            </el-form-item>
-            <br>
-            <el-form-item label="出售比例:" style="display: inline-block; white-space: nowrap;">
-              <div>{{ form.ratio }}</div>
-            </el-form-item>
-            <br>
-            <el-form-item label="出售金币:" style="display: inline-block; white-space: nowrap;" prop="num">
-              <el-input class="full-width-input" v-model="form.num" placeholder="出售金币1100000-550000000" type="text"
-                tabindex="1"></el-input>
-
-            </el-form-item>
-            <br>
-            <el-form-item label="账户类型:" style="display: inline-block; white-space: nowrap;" prop="accountType">
-              <template>
-                <el-select v-model="form.accountType" clearable placeholder="请选择">
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </template>
-            </el-form-item>
-            <br>
-            <el-form-item label="收款账户:" style="display: inline-block; white-space: nowrap;" prop="account">
-              <el-input class="full-width-input" v-model="form.account" placeholder="请输入提现账号" type="text"
-                tabindex="1"></el-input>
-            </el-form-item>
-            <br>
-            <el-form-item label="收款昵称:" style="display: inline-block; white-space: nowrap;" prop="nickname">
-              <el-input class="full-width-input" v-model="form.nickname" placeholder="请输入提现账号昵称" type="text"
-                tabindex="1"></el-input>
-            </el-form-item>
-            <br>
-            <div class="submit-button-centre">
-              <el-button type="primary" @click="validateForm('sell')">出售</el-button>
-            </div>
-          </el-form>
-        </el-dialog> -->
       </div>
       <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
       :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"

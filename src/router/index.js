@@ -124,6 +124,17 @@ export const constantRoutes = [
       component: () => import('@/views/game/ptwop'),
       hidden: true
     }]
+  },
+   //提现管理
+   {
+    path: '/content/order',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'order',
+      component: () => import('@/views/content/order'),
+      hidden: true
+    }]
   }
 
 ]
