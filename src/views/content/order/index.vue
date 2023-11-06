@@ -244,8 +244,7 @@ export default {
             this.coinsale = false
         },
         openDialog() {
-            this.coinsale = true;
-            console.log("test");
+            this.coinsale = true
         },
         validateForm(action) {
             this.$refs.form.validate(valid => {
