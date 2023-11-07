@@ -1,14 +1,14 @@
 import request from '@/utils/request'
 
-export function listBlood(){
+export function listPtp(){
     return request({
-        url: '/game/control/blood',
+        url: '/game/control/p2p',
         method: 'get'
     })
 }
-export function updateBolood(gameControlVo){
+export function updateptp(gameControlVo){
     return request({
-        url: '/game/control/blood',
+        url: '/game/control/p2p',
         method: 'put',
         data: gameControlVo
     })
