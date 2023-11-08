@@ -6,10 +6,10 @@ export function listPtp(){
         method: 'get'
     })
 }
-export function updateptp(gameControlVo){
+export function gameUserUpdate(userControl){
     return request({
         url: '/game/control/p2p',
         method: 'put',
-        data: gameControlVo
+        data: userControl
     })
 }

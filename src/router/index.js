@@ -114,7 +114,7 @@ export const constantRoutes = [
       hidden: true
     }]
   },
-  //点对点
+  //点控
   {
     path: '/game/ptwop',
     component: Layout,

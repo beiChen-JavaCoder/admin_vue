@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div>
-      <el-row class="block-col-2">
-        <el-col :span="12">
+      <el-row class="dropdown-container">
+        <el-col :span="24">
           <span class="demonstration">游戏列表</span>
           <el-dropdown @command="handleDropdownCommand">
             <span class="el-dropdown-link">
@@ -20,8 +20,8 @@
     <el-form :inline="true" ref="game" :model="game" :rules="rules.game">
       <br />
       <div label="游戏信息" style="position: relative">
-        <span class="label" style="width: auto; font-size: large; margin-right: 50px;">游戏ID:{{ game.gameId }} </span>
-        <span class="label" style="width: auto; font-size: large; margin-right: 50px;">血池控制:{{ game.gameName }} </span>
+        <span class="label" style="width: auto; font-size: large; margin-right: 50px;">游戏ID: {{ game.gameId }} </span>
+        <span class="label" style="width: auto; font-size: large; margin-right: 50px;">游戏名称: {{ game.gameName }} </span>
       </div>
       <br />
       <br />
@@ -30,7 +30,7 @@
         <el-form-item label="分值">
           <el-input clearable size="small" v-model="game.bloodScore" :disabled="true" type="text" style="width: 120px;" />
         </el-form-item>
-        <el-form-item label="加减金币任务" style="margin-left: 50px;" prop="score">
+        <el-form-item label="加减金币任务" style="margin-left: 120px;" prop="score">
           <el-input clearable size="small" v-model="game.score" placeholder="+或-相应的数" type="text" style="width: 120px;" />
         </el-form-item>
         <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 0)">执行</el-button>
@@ -108,6 +108,8 @@ export default {
       total: 0,
       //0:血池，1:狂吐，2:吐分，3:狂吃，4:吃分
       controlType: undefined,
+      //响应结果
+      remsg: "test",
 
       game: {
         bigEatControl: {
@@ -166,7 +168,9 @@ export default {
             ]
           }
         }
-      }
+      },
+      loading: true
+ 
     }
   }
   ,
@@ -175,7 +179,7 @@ export default {
     getList() {
       this.loading = true
       listBlood().then((response) => {
-
+        console.log(response)
         this.games = response.rows
         this.total = response.total
         this.loading = false
@@ -202,7 +206,11 @@ export default {
         game: game,
         score: game.score
       }
-      updateBolood(gameControlVo)
+      updateBolood(gameControlVo).then((response) => {
+        console.log(response)
+        if (this.response.code == 200)
+          this.$message.success("响应成功")
+      })
     },
     handleDropdownCommand(command) {
       this.game = command;
@@ -219,13 +227,13 @@ export default {
 <style>
 .container {
   /**设置边框 */
-  border: 1px solid #ccc;
-  padding: 10px;
+  /* border: 1px solid #ccc;
+  padding: 10px; */
 
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 500px;
+  height: auto;
   /* 设置父容器的高度 */
 }
 
@@ -251,4 +259,12 @@ export default {
   color: #8492a6;
   font-size: 14px;
   margin-bottom: 20px;
-}</style>
+
+}
+
+.dropdown-container {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+</style>
