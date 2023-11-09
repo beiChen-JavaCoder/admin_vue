@@ -15,14 +15,6 @@
                         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
                     </el-form-item>
                 </el-form>
-                <!-- <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-              <el-button type="primary" plain icon="el-icon-plus" :disabled="false" size="mini" @click="openDialog">新增</el-button>
-            </el-col>
-            <el-col :span="1.5">
-              <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="ids.length === 0" @click="handleDelete">删除</el-button>
-            </el-col>
-          </el-row> -->
                 <el-table :data="tableData" stripe style="width: 100%" :expand-row-keys="expandedRows" v-loading="loading"
                     @selection-change="handleSelectionChange">
                     <el-table-column prop="rid" label="玩家编号" align="center" />
@@ -33,10 +25,10 @@
                             </el-tooltip>
                         </template>
                     </el-table-column>
-                    <el-table-column label="账号类型" prop="accountType" align="center">
+                    <el-table-column label="账号类型" prop="sAccountType" align="center">
                         <template slot-scope="scope">
-                            <el-tooltip :content="scope.row.accountType" placement="top">
-                                <div class="tooltip">{{ scope.row.accountType }}</div>
+                            <el-tooltip :content="scope.row.sAccountType" placement="top">
+                                <div class="tooltip">{{ scope.row.sAccountType }}</div>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -55,24 +47,24 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="订单状态" prop="status" align="center">
+                    <el-table-column label="订单状态" prop="sStatus" align="center">
                         <template slot-scope="scope">
-                            <el-tooltip :content="scope.row.status" placement="top">
-                                <div class="tooltip">{{ scope.row.status }}</div>
+                            <el-tooltip :content="scope.row.sStatus" placement="top">
+                                <div class="tooltip">{{ scope.row.sStatus }}</div>
                             </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column label="创建时间" prop="createTime" align="center">
                         <template slot-scope="scope">
-                            <el-tooltip :content="scope.row.createTime" placement="top">
-                                <div class="tooltip">{{ scope.row.createTime }}</div>
+                            <el-tooltip :content="scope.row.createTimeDate" placement="top">
+                                <div class="tooltip">{{ scope.row.createTimeDate }}</div>
                             </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column label="超时时间" prop="timeOut" align="center">
                         <template slot-scope="scope">
-                            <el-tooltip :content="scope.row.timeOut" placement="top">
-                                <div class="tooltip">{{ scope.row.timeOut }}</div>
+                            <el-tooltip :content="scope.row.timeOutDate" placement="top">
+                                <div class="tooltip">{{ scope.row.timeOutDate }}</div>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -80,9 +72,6 @@
                         <template slot-scope="scope">
                             <el-button size="mini" type="text" icon="el-icon-edit"
                                 @click="openDialog(scope.row)">审核</el-button>
-                            <!-- <el-button size="mini" type="text" icon="el-icon-delete"
-                                @click="handleDelete(scope.row)">删除</el-button> -->
-                            <!-- <el-button size="mini" type="text" icon="el-icon-coin" @click="openDialog(scope.row)">出售金币</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -95,29 +84,29 @@
                     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
                         <el-row>
                             <el-col :span="24">
-                                <el-form-item label="账号类型" prop="accountType">
-                                    <el-input v-model="form.accountType" placeholder="微信" :disabled="true" maxlength="30" />
+                                <el-form-item label="账号类型">
+                                    <el-input v-model="form.sAccountType"  :disabled="true" maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
-                                <el-form-item label="收款账号" prop="payeeAccount">
-                                    <el-input v-model="form.payeeAccount" placeholder="收款账号" :disabled="true"
+                                <el-form-item label="收款账号">
+                                    <el-input v-model="form.payeeAccount"  :disabled="true"
                                         maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
-                                <el-form-item label="收款昵称" prop="wx">
-                                    <el-input v-model="form.payeeNickname" placeholder="收款昵称" :disabled="true" maxlength="30" />
+                                <el-form-item label="收款昵称">
+                                    <el-input v-model="form.payeeNickname"  :disabled="true" maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
-                                <el-form-item label="创建时间" prop="createTime">
-                                    <el-input v-model="form.createTime" placeholder="创建时间" :disabled="true" maxlength="30" />
+                                <el-form-item label="创建时间">
+                                    <el-input v-model="form.createTimeDate"  :disabled="true" maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
-                                <el-form-item label="交易凭证" prop="voucher">
-                                    <el-input v-model="form.voucher" placeholder="请输入交易凭证" maxlength="30" />
+                                <el-form-item label="交易凭证">
+                                    <el-input v-model="form.voucher" maxlength="30" />
                                 </el-form-item>
                             </el-col>
 
@@ -145,16 +134,10 @@ export default {
     name: 'Item',
     data() {
         return {
-            options: [{
-                value: 'A',
-                label: '支付宝'
-            }, {
-                value: 'B',
-                label: '微信'
-            }],
             value: '',
             tableData: [
             ],
+            title:undefined,
             // 选中数组
             ids: [],
             // 表单参数
@@ -188,6 +171,12 @@ export default {
     created() {
         this.getList()
     },
+    computed: {
+        accountType() {
+            return this.form.accountType 
+        }
+    },
+
 
     methods: {
         // 多选框选中数据
@@ -200,11 +189,13 @@ export default {
             console.log(this.queryParams)
             orderList(this.queryParams).then((response) => {
                 this.tableData = response.rows
+
                 this.total = response.total
                 this.loading = false
       
             })
         },
+        
         /** 搜索按钮操作 */
         handleQuery() {
             this.queryParams.pageNum = 1
@@ -243,7 +234,13 @@ export default {
         cancel() {
             this.coinsale = false
         },
-        openDialog() {
+        openDialog(row) {
+            this.title = "提现审核"
+            this.form.sAccountType = row.sAccountType
+            this.form.payeeAccount = row.payeeAccount
+            this.form.payeeNickname = row.payeeNickname
+            this.form.createTimeDate = row.createTimeDate
+
             this.coinsale = true
         },
         validateForm(action) {

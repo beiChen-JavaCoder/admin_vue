@@ -34,7 +34,7 @@
           <br />
           <div>
             <el-form-item label="玩家id" prop="userId">
-              <el-input placeholder="请输入玩家id或名称" v-model="queryParams.queryId" clearable size="small"
+              <el-input placeholder="请输入玩家id" v-model="queryParams.queryId" clearable size="small"
                 style="width: 240px" />
             </el-form-item>
             <el-form-item>
@@ -76,9 +76,9 @@ export default {
     return {
       queryParams: {
         //分页参数
-        pageNum: 2,
+        pageNum: 1,
         pageSize: 10,
-        queryId: undefined,
+        queryId: null,
       },
       //搜索结果
       userControl: {},
@@ -115,23 +115,35 @@ export default {
   },
   methods: {
     handleQuery() {
-      var userControls = this.game.userControls
-
-       var arr = userControls.forEach(userControl => {
-        if (userControl.userId === this.queryParams.queryId) {
-          return userControl
+      //如果查询为空则返回全部数据
+      if (this.queryParams.queryId == null) {
+        //设置默认第一页
+        this.currentChange(1)
+        return
+      }
+      let userControls = this.game.userControls
+      // this.pageUserControls = userControls.filter(function (item) {
+      //   return item.userId == 100002;
+      // });
+      //过滤分页数据
+      let list = [];
+      userControls.forEach(item => {
+        if (item.userId == this.queryParams.queryId) {
+          list.push(item);
         }
       });
-      //查询操作
-      var arr2 = [] 
-      arr.push({
-        qwe:"111"
-      })
-      console.log(arr)
-      // this.game.userControls = null
-      // this.game.userControls.push(userControl)
+      if (list.length === 0) {
+        console.log(list)
+        this.currentChange(1)
 
-
+        return
+      }
+      //更新分页列表数据
+      this.pageUserControls = list
+      this.total = list.length
+      console.log(list);
+      console.log(this.queryParams.queryId);
+      this.queryParams.queryId = null
     },
     //监控分页变化
     currentChange(val) {
@@ -147,7 +159,7 @@ export default {
     },
     //分页玩家
     getUserPage() {
-
+      
       var num = this.queryParams.pageNum
       var size = this.queryParams.pageSize
       var userControls = this.game.userControls

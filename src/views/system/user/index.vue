@@ -46,8 +46,9 @@
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间" align="center" />
-
+          <!-- 编号为1的用户无法操作 -->
           <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
+          
             <template v-if="scope.row.id !== 1" slot-scope="scope">
               <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
               <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
