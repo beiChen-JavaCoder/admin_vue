@@ -112,65 +112,64 @@ export default {
       remsg: "test",
 
       game: {
-        bigEatControl: {
-          limitScore: "-1000000",
-          ratio: "7000",
-        },
+        gameId: undefined,
+        bloodScore: undefined,
+        gameName: undefined,
+        score: undefined,
         bigVomitControl: {
-          limitScore: "10000000",
-          ratio: "7000"
+          limitScore: undefined,
+          ratio: undefined
         },
-        bloodScore: 26189000,
-        score: '',
-        eatControl: {
-          limitScore: 100,
-          ratio: 5000
-        },
-        gameId: 901,
-        gameName: "骰子",
-
         vomitControl: {
-          limitScore: "1000000",
-          ratio: "5000"
+          limitScore: undefined,
+          ratio: undefined
+        },
+        eatControl: {
+          limitScore: undefined,
+          ratio: undefined
+        },
+        bigEatControl: {
+          limitScore: undefined,
+          ratio: undefined
         }
       },
       rules: {
-        game: {
-          // 表单验证规则
-          score: [
-            { required: true, message: '请输入加减金币任务分值', trigger: 'blur' },
-            { pattern: /^[+-]\d+$/, message: '分值必须以 + 或 - 开头并为数字', trigger: 'blur' }
-          ],
-          bigVomitControl: {
-            ratio: [
-              { required: true, message: '请输入1-10000', trigger: 'blur' },
-              { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
+        // game: {
+        //   // 表单验证规则
+        //   score: [
+        //     { required: true, message: '请输入加减金币任务分值', trigger: 'blur' },
+        //     { pattern: /^[+-]\d+$/, message: '分值必须以 + 或 - 开头并为数字', trigger: 'blur' }
+        //   ],
+        //   bigVomitControl: {
+        //     ratio: [
+        //       { required: true, message: '请输入1-10000', trigger: 'blur' },
+        //       { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
 
-            ]
-          },
-          vomitControl: {
-            ratio: [
-              { required: true, message: '请输入1-10000', trigger: 'blur' },
-              { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
-            ]
-          },
-          eatControl: {
-            ratio: [
-              { required: true, message: '请输入1-10000', trigger: 'blur' },
-              { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
+        //     ]
+        //   },
+        //   vomitControl: {
+        //     ratio: [
+        //       { required: true, message: '请输入1-10000', trigger: 'blur' },
+        //       { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
+        //     ]
+        //   },
+        //   eatControl: {
+        //     ratio: [
+        //       { required: true, message: '请输入1-10000', trigger: 'blur' },
+        //       { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
 
-            ]
-          },
-          bigEatControl: {
-            ratio: [
-              { required: true, message: '请输入1-10000', trigger: 'blur' },
-              { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
-            ]
-          }
-        }
+        //     ]
+        //   },
+        //   bigEatControl: {
+        //     ratio: [
+        //       { required: true, message: '请输入1-10000', trigger: 'blur' },
+        //       { pattern: /^(0*([1-9][0-9]{0,3}|10000))$/, message: '分值必须为1-10000之间的数字', trigger: 'blur' }
+        //     ]
+        //   }
+        // }
       },
       loading: true
- 
+
     }
   }
   ,
@@ -179,13 +178,19 @@ export default {
     getList() {
       this.loading = true
       listBlood().then((response) => {
-        console.log(response)
         this.games = response.rows
         this.total = response.total
         this.loading = false
-        console.log(this.games)
-
+        this.firstGame()
       })
+      // if(this.game.gameName === null){
+      this.firstGame(this.game)
+      // }
+    },
+    firstGame() {
+      let game = this.games[0]
+      this.game = game
+      console.log(game)
     },
     handleSubmit(game, type) {
       this.$refs.game.validate(valid => {
@@ -206,11 +211,10 @@ export default {
         game: game,
         score: game.score
       }
-      updateBolood(gameControlVo).then((response) => {
-        console.log(response)
-        if (this.response.code == 200)
-          this.$message.success("响应成功")
+      updateBolood(gameControlVo).then(response => {
+        this.$modal.msgSuccess('修改成功')
       })
+      this.getList()
     },
     handleDropdownCommand(command) {
       this.game = command;
@@ -220,6 +224,8 @@ export default {
   },
 
   created() {
+    //第一次获取game
+
     this.getList()
   }
 }

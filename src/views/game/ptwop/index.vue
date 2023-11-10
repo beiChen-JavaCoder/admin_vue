@@ -34,11 +34,13 @@
           <br />
           <div>
             <el-form-item label="玩家id" prop="userId">
-              <el-input placeholder="请输入玩家id" v-model="queryParams.queryId" clearable size="small"
-                style="width: 240px" />
+              <el-input placeholder="请输入玩家id" v-model="queryParams.queryId" clearable size="small" style="width: 240px" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="openDialog">新增</el-button>
             </el-form-item>
           </div>
           <hr />
@@ -67,10 +69,35 @@
       </el-form>
     </div>
     <br />
+
+    <!-- 添加或修改角色配置对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-col :span="6">
+          <el-form-item label="玩家id">
+            <el-input v-model="form.userId" placeholder="请输入玩家id" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="原始分數">
+            <el-input v-model="form.currentScore" placeholder="请输入原始分數" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="加減任務分數">
+            <el-input v-model="form.targetScore" placeholder="请输入加减任务分数" />
+          </el-form-item>
+        </el-col>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { gameUserUpdate, listPtp } from '@/api/game/ptp'
+import { gameUserUpdate, listPtp,addUserControl } from '@/api/game/ptp'
 export default {
   data() {
     return {
@@ -84,19 +111,23 @@ export default {
       userControl: {},
       // 总条数
       total: 0,
+      //控制dilog框
+      open: false,
+      title: '',
+
       pageUserControls: [],
       ptps: [],
       games: [],
       game: {
-        gameId: 901,
-        gameName: "骰子",
-        userControls: [
-          {
-            userId: 1,
-            currentScore: 0,
-            targetScore: 10000
-          }
-        ]
+        // gameId: 901,
+        // gameName: "骰子",
+        // userControls: [
+        //   {
+        //     userId: 1,
+        //     currentScore: 0,
+        //     targetScore: 10000
+        //   }
+        // ]
       }
       ,
       //用于表单验证
@@ -108,12 +139,46 @@ export default {
             { required: true, message: '请输入加减金币任务分值', trigger: 'blur' },
             { pattern: /^[+-]\d+$/, message: '分值必须以 + 或 - 开头并为数字', trigger: 'blur' }
           ]
-        }
+        },
+          form:{
+            targetScore: [
+              { required: true, message: '请输入玩家id', trigger: 'blur' },
+              { pattern: /^[0-9]+$/, message: '玩家id必须为数字', trigger: 'blur' }
+            ]
+          }
+
       }
     }
-
   },
   methods: {
+    submitForm(){
+      this.open = false
+      this.title = "新增计划"
+      this.form.gameId = this.game.gameId
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          addUserControl(this.form).then((response) =>{
+            this.$notify({
+              title: '成功',
+              message: '添加成功',
+              type:'success',
+              duration: 2000
+            })
+            this.getList()
+          })
+        }else{
+
+        }
+        console.log(this.form)
+
+    })
+  },
+    openDialog() {
+      this.open = true
+    },
+    cancel() {
+      this.open = false
+    },
     handleQuery() {
       //如果查询为空则返回全部数据
       if (this.queryParams.queryId == null) {
@@ -130,6 +195,8 @@ export default {
       userControls.forEach(item => {
         if (item.userId == this.queryParams.queryId) {
           list.push(item);
+          console.log(item);
+
         }
       });
       if (list.length === 0) {
@@ -159,10 +226,11 @@ export default {
     },
     //分页玩家
     getUserPage() {
-      
+
       var num = this.queryParams.pageNum
       var size = this.queryParams.pageSize
       var userControls = this.game.userControls
+
 
       this.pageUserControls = userControls.slice(
         (num - 1) * size,
@@ -182,16 +250,22 @@ export default {
       //     console.log('表单验证未通过');
       //   }
       // });
+
+
+      //修改血池
       userControl.gameId = this.game.gameId;
+      userControl.type = 2
       this.userControlUpdate(userControl)
       this.game.gameId = null;
       this.getList()
+      console.log(userControl)
 
     },
     //更新游戏玩家信息
     userControlUpdate(userControl) {
 
       gameUserUpdate(userControl).then((response => {
+
         this.$modal.msgSuccess('更新成功')
 
       }))
@@ -208,6 +282,9 @@ export default {
       this.loading = true
       listPtp().then((response) => {
         this.games = response.rows
+        this.games.forEach(game => {
+
+        })
         this.total = response.total
         this.loading = false
         //给game默认值

@@ -175,6 +175,7 @@ export default {
           this.$modal.msgSuccess('充值成功')
         })
         .catch(() => { })
+        this.getList()
       this.coinsale = false;
     },
     // 取消按钮

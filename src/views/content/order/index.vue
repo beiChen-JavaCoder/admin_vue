@@ -127,7 +127,7 @@
 </template>
   
 <script>
-import { sellMerchant, listItem, delMerchant,} from '@/api/content/item'
+import { sellMerchant, delMerchant,} from '@/api/content/item'
 import {orderList,updateOrder } from '@/api/content/order'
 
 export default {
@@ -189,7 +189,6 @@ export default {
             console.log(this.queryParams)
             orderList(this.queryParams).then((response) => {
                 this.tableData = response.rows
-
                 this.total = response.total
                 this.loading = false
       
@@ -228,6 +227,7 @@ export default {
                     this.$modal.msgSuccess('审核已提交')
                 })
                 .catch(() => { })
+                this.getList()
             this.coinsale = false;
         },
         // 取消按钮

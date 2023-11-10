@@ -135,6 +135,16 @@ export const constantRoutes = [
       component: () => import('@/views/content/order'),
       hidden: true
     }]
+  },
+  {
+    path: '/game/robot',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'order',
+      component: () => import('@/views/game/robot'),
+      hidden: true
+    }]
   }
 
 ]
