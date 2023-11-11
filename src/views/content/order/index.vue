@@ -131,7 +131,7 @@ import { sellMerchant, delMerchant,} from '@/api/content/item'
 import {orderList,updateOrder } from '@/api/content/order'
 
 export default {
-    name: 'Item',
+    name: 'order',
     data() {
         return {
             value: '',

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="top-container">
     <el-row class="dropdown-container">
       <el-col :span="24">
         <span class="demonstration">游戏列表</span>
@@ -304,7 +304,7 @@ export default {
 
 </script>
 <style>
-.container {
+.top-container {
   /* *设置边框 */
   /* border: 1px solid #ccc;
   padding: 10px; */
