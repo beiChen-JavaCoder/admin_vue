@@ -49,14 +49,13 @@
               <el-input clearable size="small" v-model="userControl.userId" :disabled="true" type="text"
                 style="width: 120px;" />
             </el-form-item>
-            <el-form-item label="原始分数" style="margin-left: 60px;">
+            <el-form-item label="完成分数" style="margin-left: 60px;">
               <el-input clearable size="small" v-model="userControl.currentScore" :disabled="true" type="text"
                 style="width: 120px;  " />
             </el-form-item>
             <el-form-item label="加减金币任务" style="margin-left: 60px;">
-              <el-input clearable size="small" v-model="userControl.targetScore" type="text" style="width: 120px;  " />
+              <el-input clearable size="small" v-model="userControl.targetScore" :disabled="true" type="text"  style="width: 120px;  " />
             </el-form-item>
-            <el-button @click="handleSubmit(userControl)">执行</el-button>
             <br>
           </div>
         </div>
@@ -73,18 +72,13 @@
     <!-- 添加或修改角色配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item label="玩家id">
             <el-input v-model="form.userId" placeholder="请输入玩家id" />
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="原始分數">
-            <el-input v-model="form.currentScore" placeholder="请输入原始分數" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="加減任務分數">
+        <el-col :span="12">
+          <el-form-item label="加減任务分数">
             <el-input v-model="form.targetScore" placeholder="请输入加减任务分数" />
           </el-form-item>
         </el-col>

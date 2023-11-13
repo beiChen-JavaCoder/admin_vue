@@ -20,6 +20,11 @@
                         }}</span>
                         <br />
                     </div>
+                    <div label="机器人导入" class="label">
+                        <el-upload :action="''" :before-upload="handleBeforeUpload">
+                            <el-button size="small" type="primary">导入机器人</el-button>
+                        </el-upload>
+                    </div>
                     <br />
                     <div>
                         <el-form ref="form" :model="form" :rules="form" label-width="auto">
@@ -96,11 +101,7 @@
 
                         </div>
                         <hr />
-                        <div class="upload-container">
-                            <el-upload class="upload-demo" :action="''" :before-upload="handleBeforeUpload">
-                                <el-button size="small" type="primary">导入机器人</el-button>
-                            </el-upload>
-                        </div>
+
                     </div>
                 </div>
                 <span style="color: red;"></span>
@@ -118,27 +119,16 @@ export default {
         return {
             // 可以在这里定义一些需要用到的数据
 
-
             loading: true,
 
             pageUserControls: [],
             ptps: [],
             games: [],
-            game: {
-                //  * --机器人初始金币区间
-                initScore: { minScore: 50000, maxScore: 200000000 },
-                //  * --机器人下注区间
-                betScore: { minScore: 10000, maxScore: 5000000 },
-                //  * --机器人携带金币区间(存取区间: 低于最小值存, 高于最大值取)
-                carryScore: { minScore: 10000, maxScore: 5000000000 },
-                //  * --机器人下注时间区间(毫秒)
-                betTime: { min: 500, max: 29000 },
-                //  * --机器人下注概率(万分比)
-                betRatio: 10000
-            },
+            game: {},
 
             //用于表单验证
-            form: {},
+            form: {
+            },
             rules: {
                 form: {
                     betRatio: [
@@ -152,36 +142,49 @@ export default {
     methods: {
         handleSubmit(type) {
             var robotContrlUpdate = {};
+            var UpFrom = this.form;
             if (type === 0) {
-                robotContrlUpdate = JSON.parse(JSON.stringify(this.form.betScore));
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.initScore));
                 robotContrlUpdate.type = 0;
+                robotContrlUpdate.min = UpFrom.initScore.min;
+                robotContrlUpdate.max = UpFrom.initScore.max;
+                console.log("UpFrom.initScore.max");
+                console.log(UpFrom.initScore.max);
             } else if (type === 1) {
-                robotContrlUpdate = JSON.parse(JSON.stringify(this.form.initScore));
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.betScore));
                 robotContrlUpdate.type = 1;
+                robotContrlUpdate.min = UpFrom.betScore.min;
+                robotContrlUpdate.max = UpFrom.betScore.max;
+
             } else if (type === 2) {
-                robotContrlUpdate = JSON.parse(JSON.stringify(this.form.carryScore));
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.carryScore));
                 robotContrlUpdate.type = 2;
-
+                robotContrlUpdate.min = UpFrom.carryScore.min;
+                robotContrlUpdate.max = UpFrom.carryScore.max;
             } else if (type === 3) {
-                robotContrlUpdate = JSON.parse(JSON.stringify(this.form.betTime));
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.betTime));
                 robotContrlUpdate.type = 3;
-
+                robotContrlUpdate.min = UpFrom.betTime.min;
+                robotContrlUpdate.max = UpFrom.betTime.max;
             } else if (type === 4) {
-                robotContrlUpdate.betRatio = this.form.betRatio
+                robotContrlUpdate.betRatio = UpFrom.betRatio
                 robotContrlUpdate.type = 4;
             }
-            robotContrlUpdate.gameId =this.form.gameId
-            console.log(robotContrlUpdate)
+            robotContrlUpdate.gameId = UpFrom.gameId;
 
-            upRobotScore(robotContrlUpdate).then(response => {
-                console.log(response)
-                this.$message({
-                    showClose: true,
-                    message: '执行成功',
-                    type: 'success'
-                });
-            })
-            this.getList()
+            upRobotScore(robotContrlUpdate)
+                .then(() => {
+                    this.getList()
+                    this.$modal.msgSuccess('执行成功')
+                })
+                .catch(() => {
+                    this.$modal.msgSuccess('执行失败')
+                })
+                ,
+                //刷新当前数据
+
+                console.log("更新后的form");
+            console.log(this.form)
         },
         handleBeforeUpload(file) {
             // 在这里可以对文件进行处理，例如校验、压缩等操作
@@ -204,14 +207,10 @@ export default {
 
                 this.games = response.rows;
                 this.total = response.total;
-                console.log(this.games);
                 this.game = this.games[0];
                 this.form = this.games[0];
-                console.log(this.game);
-                console.log(this.form);
             });
             this.loading = false;
-
         }
     },
     created() {
@@ -243,14 +242,20 @@ export default {
     font-weight: bold;
     /* 可选，用于添加间距 */
 }
+
 .upload-container {
-  margin-top: 20px; /* 上边距 */
-  padding: 10px; /* 内边距 */
-  border: 1px solid #ccc; /* 边框 */
-  border-radius: 5px; /* 圆角 */
+    margin-top: 20px;
+    /* 上边距 */
+    padding: 10px;
+    /* 内边距 */
+    border: 1px solid #ccc;
+    /* 边框 */
+    border-radius: 5px;
+    
+    flex: 1;  /* 使两个 div 充满父容器的宽度 */
+    /* 圆角 */
 }
 
 /* 可以根据需要进一步添加样式 */
-
 </style>
   

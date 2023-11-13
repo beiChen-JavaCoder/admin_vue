@@ -26,9 +26,9 @@
       <br />
       <br />
       <div label="血池控制" style="position: relative">
-        <span class="label" style="width: auto; margin-right: 50px;">血池控制 </span>
+        <span class="label" style="width: auto;  margin-right: 50px;">血池控制 </span>
         <el-form-item label="分值">
-          <el-input clearable size="small" v-model="game.bloodScore" :disabled="true" type="text" style="width: 120px;" />
+          <el-input clearable size="small" v-model="game.bloodScore" disabled="true" type="text" style="width: 120px;" />
         </el-form-item>
         <el-form-item label="加减金币任务" style="margin-left: 120px;" prop="score">
           <el-input clearable size="small" v-model="game.score" placeholder="+或-相应的数" type="text" style="width: 120px;" />
@@ -41,7 +41,7 @@
         <div>
           <span class="label" style="width: auto; margin-right: 50px;">狂吐控制</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.bigVomitControl.limitScore" type="text" :disabled="true"
+            <el-input clearable size="small" v-model="game.bigVomitControl.limitScore" type="text" UpFrom
               style="width: 120px;   margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
@@ -55,7 +55,7 @@
         <div>
           <span class="label" style="width: auto; margin-right: 50px;">吐分控制</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.vomitControl.limitScore" type="text" :disabled="true"
+            <el-input clearable size="small" v-model="game.vomitControl.limitScore" type="text"
               style="width: 120px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
@@ -69,7 +69,7 @@
         <div>
           <span class="label" style="width: auto; margin-right: 50px; ">吃分控制</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.eatControl.limitScore" type="text" :disabled="true"
+            <el-input clearable size="small" v-model="game.eatControl.limitScore" type="text"
               style="width: 120px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
@@ -83,7 +83,7 @@
         <div>
           <span class="label" style="width: auto; margin-right: 50px; ">狂吃控制</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.bigEatControl.limitScore" type="text" :disabled="true"
+            <el-input clearable size="small" v-model="game.bigEatControl.limitScore" type="text"
               style="width: 120px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
@@ -98,7 +98,7 @@
 </template>
 <script>
 
-import { listBlood, updateBolood } from '@/api/game/blood'
+import { listBlood, updateBolood,refreshScore } from '@/api/game/blood'
 
 export default {
   name: 'blood',
@@ -110,6 +110,8 @@ export default {
       controlType: undefined,
       //响应结果
       remsg: "test",
+      //定时器运行时间
+      minutes: 0,
 
       game: {
         gameId: undefined,
@@ -195,7 +197,7 @@ export default {
     handleSubmit(game, type) {
       this.$refs.game.validate(valid => {
         console.log(game)
-        if (valid) {
+        if (true) {
           // 表单验证通过，执行提交操作
           console.log('表单验证通过，执行提交操作');
           this.bloodupdate(game, type)
@@ -211,23 +213,43 @@ export default {
         game: game,
         score: game.score
       }
-      updateBolood(gameControlVo).then(response => {
-        this.$modal.msgSuccess('修改成功')
-      })
-      this.getList()
+      updateBolood(gameControlVo)
+        .then(() => {
+          this.getList()
+          this.$modal.msgSuccess('删除成功')
+        })
+
     },
     handleDropdownCommand(command) {
       this.game = command;
       // 根据选项做其他操作，比如初始化表单数据等
     },
+    refreshBlood(){
+      refreshScore().then((response) => {
+        console.log("定时器血池分数第"+this.minutes+"次刷新");
+        var bloodScore = response.rows
+        bloodScore.forEach(element => {
+          this.game.bloodScore = element.bloodScore
+        });
+        console.log(this.game.bloodScore);
+      });
+    }
+
 
   },
 
   created() {
     //第一次获取game
-
+    this.timer = setInterval(() => {
+      this.minutes++
+      // 在这里调用你需要执行的方法
+      this.refreshBlood()
+    }, 30000)
     this.getList()
-  }
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  },
 }
 </script>
 <style>

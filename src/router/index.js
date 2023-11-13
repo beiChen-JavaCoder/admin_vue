@@ -136,13 +136,24 @@ export const constantRoutes = [
       hidden: true
     }]
   },
+  //机器人控制
   {
     path: '/game/robot',
     component: Layout,
     children: [{
       path: '/',
-      name: 'order',
+      name: 'robot',
       component: () => import('@/views/game/robot'),
+      hidden: true
+    }]
+  },
+  {
+    path: '/game/revenue',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'revenue',
+      component: () => import('@/views/game/revenue'),
       hidden: true
     }]
   }

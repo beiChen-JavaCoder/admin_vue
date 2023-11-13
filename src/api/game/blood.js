@@ -13,3 +13,9 @@ export function updateBolood(gameControlVo){
         data: gameControlVo
     })
 }
+export function refreshScore(){
+    return request({
+        url: '/game/blood/refresh',
+        method: 'get'
+    })
+}
