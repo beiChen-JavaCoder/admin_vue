@@ -3,8 +3,8 @@
     <div>
       <div style="position: relative;">
         <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-          <el-form-item label="用户名：" prop="userName">
-            <el-input v-model="queryParams.userName" placeholder="用户名" clearable size="small" style="width: 240px"
+          <el-form-item label="玩家id：" prop="userName">
+            <el-input v-model="queryParams.id" placeholder="玩家id" clearable size="small" style="width: 240px"
               @keyup.enter.native="handleQuery" />
           </el-form-item>
           <el-form-item>

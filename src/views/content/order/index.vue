@@ -218,7 +218,7 @@ export default {
         /** 新增商户 */
         submitForm(form) {
             this.$modal
-                .confirm("是否确认审核玩家编号" + form.rid+"的提现订单")
+                .confirm("是否确认审核提现编号" + form.id+"的提现订单")
                 .then(function () {
                     return updateOrder(form)
                 })
@@ -238,8 +238,12 @@ export default {
             this.title = "提现审核"
             this.form.sAccountType = row.sAccountType
             this.form.payeeAccount = row.payeeAccount
-            this.form.payeeNickname = row.payeeNickname
             this.form.createTimeDate = row.createTimeDate
+            this.form.payeeNickname = row.payeeNickname
+            this.form.id = row.id
+            this.form.rid = row.rid
+
+
 
             this.coinsale = true
         },

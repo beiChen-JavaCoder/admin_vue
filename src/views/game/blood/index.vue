@@ -25,38 +25,46 @@
       </div>
       <br />
       <br />
-      <div label="血池控制" style="position: relative">
-        <span class="label" style="width: auto;  margin-right: 50px;">血池控制 </span>
-        <el-form-item label="分值">
-          <el-input clearable size="small" v-model="game.bloodScore" disabled="true" type="text" style="width: 120px;" />
-        </el-form-item>
-        <el-form-item label="加减金币任务" style="margin-left: 120px;" prop="score">
-          <el-input clearable size="small" v-model="game.score" placeholder="+或-相应的数" type="text" style="width: 120px;" />
-        </el-form-item>
-        <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 0)">执行</el-button>
+      <div>
+        <div label="当前金币" style="position: relative">
+          <span class="label" style="width: auto;  margin-right: 50px;"
+            :style="{ color: coinControlBackgroundColor }">当前金币
+          </span>
+          <el-form-item label="分值">
+            <el-input clearable size="small" :value="getFormattedValue('', 'bloodScore')"
+              @input="setFormattedValue('bloodScore')" :disabled="isdisabled" type="text" style="width: 120px;" />
+          </el-form-item>
+          <el-form-item label="加减金币任务" style="margin-left: 120px;" prop="score">
+            <el-input clearable size="small" v-model="game.score" placeholder="+或-相应的数" type="text"
+              style="width: 120px;" />
+          </el-form-item>
+          <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 0)">执行</el-button>
+        </div>
       </div>
+
       <hr>
       <br>
       <div label="平衡控制" style="position: relative; ">
-        <div>
-          <span class="label" style="width: auto; margin-right: 50px;">狂吐控制</span>
+        <div style="height: 80px;">
+          <span class="label" style="width: auto; margin-right: 50px; color:#EB453C ;">金币极多</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.bigVomitControl.limitScore" type="text" UpFrom
-              style="width: 120px;   margin-right: 100px; " />
+            <el-input clearable size="small" :value="getFormattedValue('bigVomitControl', 'limitScore')"
+              @input="setFormattedValue('bigVomitControl', 'limitScore', $event)" type="text"
+              style="width: 200px;   margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
             <el-input clearable size="small" v-model="game.bigVomitControl.ratio" placeholder="1-10000" type="text"
               style="width: 120px; " />
           </el-form-item>
           <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 1)">执行</el-button>
-
         </div>
         <br>
-        <div>
-          <span class="label" style="width: auto; margin-right: 50px;">吐分控制</span>
+        <div style="height: 150px;">
+          <span class="label" style="width: auto; margin-right: 50px; color: #FF8A80;">金币较多</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.vomitControl.limitScore" type="text"
-              style="width: 120px; margin-right: 100px; " />
+            <el-input clearable size="small" :value="getFormattedValue('vomitControl', 'limitScore')"
+              @input="setFormattedValue('vomitControl', 'limitScore', $event)" type="text"
+              style="width: 200px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
             <el-input clearable size="small" v-model="game.vomitControl.ratio" placeholder="1-10000" type="text"
@@ -66,11 +74,12 @@
 
         </div>
         <br>
-        <div>
-          <span class="label" style="width: auto; margin-right: 50px; ">吃分控制</span>
+        <div style="height: 80px;">
+          <span class="label" style="width: auto; margin-right: 50px; color:#69F0AE; ">金币较少</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.eatControl.limitScore" type="text"
-              style="width: 120px; margin-right: 100px; " />
+            <el-input clearable size="small" :value="getFormattedValue('eatControl', 'limitScore')"
+              @input="setFormattedValue('eatControl', 'limitScore', $event)" type="text"
+              style="width: 200px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
             <el-input clearable size="small" v-model="game.eatControl.ratio" placeholder="1-10000" type="text"
@@ -80,11 +89,12 @@
 
         </div>
         <br>
-        <div>
-          <span class="label" style="width: auto; margin-right: 50px; ">狂吃控制</span>
+        <div style="height: 80px;">
+          <span class="label" style="width: auto; margin-right: 50px; color:#50AE55; ">金币极少</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" v-model="game.bigEatControl.limitScore" type="text"
-              style="width: 120px; margin-right: 100px; " />
+            <el-input clearable size="small" :value="getFormattedValue('bigEatControl', 'limitScore')"
+              @input="setFormattedValue('bigEatControl', 'limitScore', $event)" type="text"
+              style="width: 200px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
             <el-input clearable size="small" v-model="game.bigEatControl.ratio" placeholder="1-10000" type="text"
@@ -98,7 +108,7 @@
 </template>
 <script>
 
-import { listBlood, updateBolood,refreshScore } from '@/api/game/blood'
+import { listBlood, updateBolood, refreshScore } from '@/api/game/blood'
 
 export default {
   name: 'blood',
@@ -112,27 +122,29 @@ export default {
       remsg: "test",
       //定时器运行时间
       minutes: 0,
+      //禁用输入框
+      isdisabled: true,
 
       game: {
-        gameId: undefined,
-        bloodScore: undefined,
-        gameName: undefined,
-        score: undefined,
+        gameId: 0,
+        bloodScore: '0',
+        gameName: "",
+        score: 0,
         bigVomitControl: {
-          limitScore: undefined,
-          ratio: undefined
+          limitScore: '0',
+          ratio: 0
         },
         vomitControl: {
-          limitScore: undefined,
-          ratio: undefined
+          limitScore: '0',
+          ratio: 0
         },
         eatControl: {
-          limitScore: undefined,
-          ratio: undefined
+          limitScore: '0',
+          ratio: 0
         },
         bigEatControl: {
-          limitScore: undefined,
-          ratio: undefined
+          limitScore: '0',
+          ratio: 0
         }
       },
       rules: {
@@ -177,6 +189,46 @@ export default {
   ,
 
   methods: {
+    //过滤属性显示
+    formatCurrency(value) {
+
+      const numericValue = parseFloat(value);
+
+      if (isNaN(numericValue)) {
+        return '0';
+      }
+
+      // 使用 toFixed 方法将数值精确到小数点后两位
+      const fixedValue = Math.abs(numericValue).toFixed(2);
+
+      // 使用正则表达式在需要的位置添加千位分隔符
+      const formattedValue = fixedValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+      const splitArr = formattedValue.split(".")
+      const formatted = splitArr[0]
+      // 判断原始值是否为负数，如果是则添加负号
+      if (numericValue < 0) {
+        return '-' + formatted;
+      } else {
+        return formatted;
+      }
+
+    },
+    parseCurrency(value) {
+      return value.replace(/[^\d.-]/g, '');
+    },
+    getFormattedValue(controlType, propertyName) {
+
+      if (controlType == '') {
+        return this.formatCurrency(this.game[propertyName]);
+      }
+      return this.formatCurrency(this.game[controlType][propertyName]);
+    },
+    setFormattedValue(controlType, propertyName, value) {
+      this.game[controlType][propertyName] = this.parseCurrency(value);
+      console.log(controlType, propertyName, value, this.game[controlType][propertyName]);
+
+    },
     getList() {
       this.loading = true
       listBlood().then((response) => {
@@ -216,7 +268,7 @@ export default {
       updateBolood(gameControlVo)
         .then(() => {
           this.getList()
-          this.$modal.msgSuccess('删除成功')
+          this.$modal.msgSuccess('执行成功')
         })
 
     },
@@ -224,9 +276,9 @@ export default {
       this.game = command;
       // 根据选项做其他操作，比如初始化表单数据等
     },
-    refreshBlood(){
+    refreshBlood() {
       refreshScore().then((response) => {
-        console.log("定时器血池分数第"+this.minutes+"次刷新");
+        console.log("定时器血池分数第" + this.minutes + "次刷新");
         var bloodScore = response.rows
         bloodScore.forEach(element => {
           this.game.bloodScore = element.bloodScore
@@ -234,7 +286,6 @@ export default {
         console.log(this.game.bloodScore);
       });
     }
-
 
   },
 
@@ -248,8 +299,27 @@ export default {
     this.getList()
   },
   beforeDestroy() {
+    //销毁定时器
     clearInterval(this.timer)
   },
+  //计算属性
+  computed: {
+    //计算颜色背景
+    coinControlBackgroundColor() {
+      const bloodScore = this.game.bloodScore;
+      if (bloodScore >= this.game.bigVomitControl.limitScore) {
+        return '#EB453C';
+      } else if (bloodScore <= this.game.bigVomitControl.limitScore && bloodScore > this.game.vomitControl.limitScore) {
+        return '#FF8A80';
+      } else if (bloodScore <= this.game.vomitControl.limitScore && bloodScore > this.game.eatControl.limitScore) {
+        return "#69F0AE";
+      } else if (bloodScore <= this.game.eatControl.limitScore && bloodScore > this.game.bigEatControl.limitScore) {
+        return "#50AE55";
+      } else if (bloodScore < this.game.bigEatControl.limitScore) {
+        return "#50AE55";
+      }
+    },
+  }
 }
 </script>
 <style>

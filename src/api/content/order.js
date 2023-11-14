@@ -11,3 +11,13 @@ export function orderList(query) {
 
 
 }
+export function updateOrder(data) {
+  return request({
+    url: '/order',
+    method: 'put',
+    data: data
+  })
+
+
+
+}
