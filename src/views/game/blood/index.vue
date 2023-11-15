@@ -32,11 +32,15 @@
           </span>
           <el-form-item label="分值">
             <el-input clearable size="small" :value="getFormattedValue('', 'bloodScore')"
-              @input="setFormattedValue('bloodScore')" :disabled="isdisabled" type="text" style="width: 120px;" />
+              @input="setFormattedValue('bloodScore')" :disabled="isdisabled" type="text" style="width: 200px;" />
           </el-form-item>
-          <el-form-item label="加减金币任务" style="margin-left: 120px;" prop="score">
+          <el-form-item label="加减金币任务" style="margin-left: 130px;" prop="score">
             <el-input clearable size="small" v-model="game.score" placeholder="+或-相应的数" type="text"
               style="width: 120px;" />
+            <br />
+            <span style="color: red;">填入正数金币（例如： 100）利润增加100元</span>
+            <br />
+            <span style="color: red;">填入负数金币 （例如：-100）利润减少100元</span>
           </el-form-item>
           <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 0)">执行</el-button>
         </div>
@@ -77,12 +81,12 @@
         <div style="height: 80px;">
           <span class="label" style="width: auto; margin-right: 50px; color:#69F0AE; ">金币较少</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" :value="getFormattedValue('eatControl', 'limitScore')"
+            <el-input clearable size="small" :disabled="isdisabled" :value="getFormattedValue('eatControl', 'limitScore')"
               @input="setFormattedValue('eatControl', 'limitScore', $event)" type="text"
               style="width: 200px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
-            <el-input clearable size="small" v-model="game.eatControl.ratio" placeholder="1-10000" type="text"
+            <el-input clearable size="small" :disabled="isdisabled" v-model="game.eatControl.ratio" placeholder="1-10000" type="text"
               style="width: 120px; " />
           </el-form-item>
           <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 4)">执行</el-button>
@@ -92,12 +96,13 @@
         <div style="height: 80px;">
           <span class="label" style="width: auto; margin-right: 50px; color:#50AE55; ">金币极少</span>
           <el-form-item label="分值">
-            <el-input clearable size="small" :value="getFormattedValue('bigEatControl', 'limitScore')"
+            <el-input clearable size="small" :disabled="isdisabled"
+              :value="getFormattedValue('bigEatControl', 'limitScore')"
               @input="setFormattedValue('bigEatControl', 'limitScore', $event)" type="text"
               style="width: 200px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
-            <el-input clearable size="small" v-model="game.bigEatControl.ratio" placeholder="1-10000" type="text"
+            <el-input clearable size="small" :disabled="isdisabled" v-model="game.bigEatControl.ratio" placeholder="1-10000" type="text"
               style="width: 120px; " />
           </el-form-item>
           <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 3)">执行</el-button>
@@ -127,23 +132,23 @@ export default {
 
       game: {
         gameId: 0,
-        bloodScore: '0',
+        bloodScore: '',
         gameName: "",
         score: 0,
         bigVomitControl: {
-          limitScore: '0',
+          limitScore: '',
           ratio: 0
         },
         vomitControl: {
-          limitScore: '0',
+          limitScore: '',
           ratio: 0
         },
         eatControl: {
-          limitScore: '0',
+          limitScore: '',
           ratio: 0
         },
         bigEatControl: {
-          limitScore: '0',
+          limitScore: '',
           ratio: 0
         }
       },
@@ -195,7 +200,7 @@ export default {
       const numericValue = parseFloat(value);
 
       if (isNaN(numericValue)) {
-        return '0';
+        return '';
       }
 
       // 使用 toFixed 方法将数值精确到小数点后两位
@@ -247,6 +252,22 @@ export default {
       console.log(game)
     },
     handleSubmit(game, type) {
+
+
+      //控制类型大小限制
+      var bigVomitControlScore = game.bigVomitControl.limitScore;
+      var vomitControl = game.vomitControl.limitScore;
+      var eatControl = game.eatControl.limitScore;
+      var bigEatControl = game.bigEatControl.limitScore;
+
+      if (!(bigVomitControlScore > vomitControl && vomitControl > eatControl && eatControl > bigEatControl)) {
+        console.log(bigVomitControlScore, vomitControl, eatControl, bigEatControl);
+
+        return this.$message.error('参数大小不匹配请核实！金币极多>金币较多>金币较少>金币极少');
+      }
+
+
+
       this.$refs.game.validate(valid => {
         console.log(game)
         if (true) {
@@ -260,6 +281,14 @@ export default {
       });
     },
     bloodupdate(game, type) {
+      //取反操作金币控制
+      var str = "" + game.score;
+      if (str.charAt(0) == '-') {
+        str = str.substring(1); // 移除开头的 "-"
+        game.score = str
+      } else {
+        game.score = "-" + str
+      }
       var gameControlVo = {
         type: type,
         game: game,

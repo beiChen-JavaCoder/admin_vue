@@ -147,6 +147,18 @@ export const constantRoutes = [
       hidden: true
     }]
   },
+    //机器人列表
+    {
+      path: '/game/robot/robotlist',
+      component: Layout,
+      children: [{
+        path: '/',
+        name: 'robotlist',
+        component: () => import('@/views/game/robot/robotlist'),
+        hidden: true
+      }]
+    },
+    //税收
   {
     path: '/game/revenue',
     component: Layout,

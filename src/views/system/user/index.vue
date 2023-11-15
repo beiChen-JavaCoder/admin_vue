@@ -25,12 +25,6 @@
           <el-col :span="1.5">
             <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="handleDelete">删除</el-button>
           </el-col>
-
-          <!-- <right-toolbar
-            :show-search.sync="showSearch"
-            :columns="columns"
-            @queryTable="getList"
-          /> -->
         </el-row>
 
         <el-table :data="userList" style="width: 100%" @selection-change="handleSelectionChange">

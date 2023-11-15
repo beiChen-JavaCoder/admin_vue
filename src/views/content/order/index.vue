@@ -17,6 +17,7 @@
                 </el-form>
                 <el-table :data="tableData" stripe style="width: 100%" :expand-row-keys="expandedRows" v-loading="loading"
                     @selection-change="handleSelectionChange">
+                    <el-table-column prop="id" label="订单id" align="center" />
                     <el-table-column prop="rid" label="玩家编号" align="center" />
                     <el-table-column label="游戏币数量" prop="num" align="center">
                         <template slot-scope="scope">

@@ -20,11 +20,7 @@
                         }}</span>
                         <br />
                     </div>
-                    <div label="机器人导入" class="label">
-                        <el-upload :action="''" :before-upload="handleBeforeUpload">
-                            <el-button size="small" type="primary">导入机器人</el-button>
-                        </el-upload>
-                    </div>
+     
                     <br />
                     <div>
                         <el-form ref="form" :model="form" :rules="form" label-width="auto">
