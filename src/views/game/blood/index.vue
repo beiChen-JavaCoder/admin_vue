@@ -34,15 +34,14 @@
             <el-input clearable size="small" :value="getFormattedValue('', 'bloodScore')"
               @input="setFormattedValue('bloodScore')" :disabled="isdisabled" type="text" style="width: 200px;" />
           </el-form-item>
-          <el-form-item label="加减金币任务" style="margin-left: 130px;" prop="score">
-            <el-input clearable size="small" v-model="game.score" placeholder="+或-相应的数" type="text"
-              style="width: 120px;" />
+          <el-form-item label="加减金币任务" style="margin-left: 120px;" prop="score">
+            <el-input clearable size="small" v-model="game.score" type="text" style="width: 120px;" />
             <br />
             <span style="color: red;">填入正数金币（例如： 100）利润增加100元</span>
             <br />
             <span style="color: red;">填入负数金币 （例如：-100）利润减少100元</span>
           </el-form-item>
-          <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 0)">执行</el-button>
+          <el-button class="label" @click="handleSubmit(game, controlType = 0)">执行</el-button>
         </div>
       </div>
 
@@ -86,8 +85,8 @@
               style="width: 200px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
-            <el-input clearable size="small" :disabled="isdisabled" v-model="game.eatControl.ratio" placeholder="1-10000" type="text"
-              style="width: 120px; " />
+            <el-input clearable size="small" :disabled="isdisabled" v-model="game.eatControl.ratio" placeholder="1-10000"
+              type="text" style="width: 120px; " />
           </el-form-item>
           <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 4)">执行</el-button>
 
@@ -102,8 +101,8 @@
               style="width: 200px; margin-right: 100px; " />
           </el-form-item>
           <el-form-item label="触发率（万分比）">
-            <el-input clearable size="small" :disabled="isdisabled" v-model="game.bigEatControl.ratio" placeholder="1-10000" type="text"
-              style="width: 120px; " />
+            <el-input clearable size="small" :disabled="isdisabled" v-model="game.bigEatControl.ratio"
+              placeholder="1-10000" type="text" style="width: 120px; " />
           </el-form-item>
           <el-button class="label" style="margin-left: 120px;" @click="handleSubmit(game, controlType = 3)">执行</el-button>
         </div>
@@ -285,19 +284,19 @@ export default {
       var str = "" + game.score;
       if (str.charAt(0) == '-') {
         str = str.substring(1); // 移除开头的 "-"
-        game.score = str
       } else {
-        game.score = "-" + str
+        str = '-'+str
       }
       var gameControlVo = {
         type: type,
         game: game,
-        score: game.score
+        score: str
       }
       updateBolood(gameControlVo)
         .then(() => {
           this.getList()
           this.$modal.msgSuccess('执行成功')
+    
         })
 
     },

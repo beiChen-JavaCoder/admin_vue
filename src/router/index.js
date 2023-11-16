@@ -125,8 +125,8 @@ export const constantRoutes = [
       hidden: true
     }]
   },
-   //提现管理
-   {
+  //提现管理
+  {
     path: '/content/order',
     component: Layout,
     children: [{
@@ -147,18 +147,18 @@ export const constantRoutes = [
       hidden: true
     }]
   },
-    //机器人列表
-    {
-      path: '/game/robot/robotlist',
-      component: Layout,
-      children: [{
-        path: '/',
-        name: 'robotlist',
-        component: () => import('@/views/game/robot/robotlist'),
-        hidden: true
-      }]
-    },
-    //税收
+  //机器人列表
+  {
+    path: '/game/robot/robotlist',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'robotlist',
+      component: () => import('@/views/game/robot/robotlist'),
+      hidden: true
+    }]
+  },
+  //税收
   {
     path: '/game/revenue',
     component: Layout,
@@ -168,8 +168,50 @@ export const constantRoutes = [
       component: () => import('@/views/game/revenue'),
       hidden: true
     }]
+  },
+    //游戏系统管理
+    {
+    path: '/system/game',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'game',
+      component: () => import('@/views/system/game'),
+      hidden: true
+    }]
+  },
+  //搜索玩家
+  {
+    path: '/player/list',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'list',
+      component: () => import('@/views/player/list'),
+      hidden: true
+    }]
+  },
+  {
+    path: '/game/ptwop',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'ptwop',
+      component: () => import('@/views/game/ptwop'),
+      hidden: true
+    }]
+  },
+  //玩家牌局流水
+  {
+    path: '/player/flow',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'flow',
+      component: () => import('@/views/player/flow'),
+      hidden: true
+    }]
   }
-
 ]
 
 const createRouter = () => new Router({

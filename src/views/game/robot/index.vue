@@ -3,12 +3,6 @@
         <div>
         </div>
         <div class="child">
-            <br />
-            <el-row :span="24" :xs="24">
-                <el-form :inline="true" label-width="68px">
-
-                </el-form>
-            </el-row>
             <el-form :inline="true" ref="pageUserControls" :modal="pageUserControls" :rules="rules.game">
                 <br />
                 <div label="机器人控制" style="position: relative">
@@ -18,89 +12,75 @@
                         <span class="label" style="width: auto; font-size: large; margin-right: 50px;">游戏名称: {{
                             game.gameName
                         }}</span>
-                        <br />
+
                     </div>
-     
+
+                    <hr />
                     <br />
                     <div>
                         <el-form ref="form" :model="form" :rules="form" label-width="auto">
                             <el-row>
-                                <el-col :span="24">
-                                    <el-form-item label="下注概率(万分比):" label-width="auto">
+                                <el-col class="form-row">
+                                    <span class="label" style="width: auto; margin-right: 170px;">下注概率(万分比)</span>
+                                    <el-form-item label-width="auto">
                                         <el-input v-model="form.betRatio"></el-input>
                                     </el-form-item>
                                     <el-form-item>
                                         <el-button @click="handleSubmit(4)">执行</el-button>
                                     </el-form-item>
-
                                 </el-col>
-                                <el-col :span="24">
-                                    <el-form-item label="初始金币区间">
-                                        <el-form-item label="最小区间:">
-                                            <el-input v-model="form.initScore.min"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="最大区间:">
-                                            <el-input v-model="form.initScore.max"></el-input>
-                                        </el-form-item>
-                                        <el-form-item>
-                                            <el-button @click="handleSubmit(0)">执行</el-button>
-                                        </el-form-item>
+                                <el-col class="form-row">
+                                    <span class="label" style="width: auto; margin-right: 50px;">初始金币区间</span>
+                                    <el-form-item label="最小区间:">
+                                        <el-input v-model="form.initScore.min"></el-input>
                                     </el-form-item>
-
-
-
+                                    <el-form-item label="最大区间:" style="width: auto; margin-right: 50px; ">
+                                        <el-input v-model="form.initScore.max"></el-input>
+                                    </el-form-item>
+                                    <el-button @click="handleSubmit(0)">执行</el-button>
                                 </el-col>
-                                <el-col :span="24">
-                                    <el-form-item label="下注区间">
-                                        <el-form-item label="最小区间:">
-                                            <el-input v-model="form.betScore.min"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="最大区间:">
-                                            <el-input v-model="form.betScore.max"></el-input>
-                                        </el-form-item>
-                                        <el-form-item>
-                                            <el-button @click="handleSubmit(1)">执行</el-button>
-                                        </el-form-item>
-                                    </el-form-item>
 
-
-                                </el-col>
-                                <el-col :span="24">
-                                    <el-form-item label="下注时间区间(毫秒)">
-                                        <el-form-item label="最小区间:">
-                                            <el-input v-model="form.betTime.min"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="最大区间:">
-                                            <el-input v-model="form.betTime.max"></el-input>
-                                        </el-form-item>
-                                        <el-form-item>
-                                            <el-button @click="handleSubmit(3)">执行</el-button>
-                                        </el-form-item>
+                                <el-col class="form-row">
+                                    <span class="label" style="width: auto; margin-right: 50px;">下注区间</span>
+                                    <el-form-item style="margin-left: 33px;" label="最小下注:">
+                                        <el-input v-model="form.betScore.min"></el-input>
                                     </el-form-item>
-                                </el-col>
-                                <el-col :span="24">
-                                    <el-form-item label="携带金币区间">
-                                        <el-form-item label="最小区间:">
-                                            <el-input v-model="form.carryScore.min"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="最大区间:">
-                                            <el-input v-model="form.carryScore.max"></el-input>
-                                        </el-form-item>
-                                        <el-form-item>
-                                            <el-button @click="handleSubmit(2)">执行</el-button>
-                                        </el-form-item>
+                                    <el-form-item label="最大下注:" style="width: auto; margin-right: 50px; ">
+                                        <el-input v-model="form.betScore.max"></el-input>
                                     </el-form-item>
+                                    <el-button @click="handleSubmit(1)">执行</el-button>
+                                </el-col>
+                                <el-col class="form-row">
+                                    <span class="label" style="width: auto; margin-right: 50px;">下注时间区间</span>
+                                    <el-form-item label="最小区间:">
+                                        <el-input v-model="form.betTime.min"></el-input>
+                                    </el-form-item>
+                                    <span style="margin-right: 50px; color: #606266; ">秒</span>
+                                    <el-form-item label="最大区间:">
+                                        <el-input v-model="form.betTime.max"></el-input> 
+                                    </el-form-item>
+                                    <span style="margin-right: 50px; color: #606266; ">秒</span>
+                                    <el-button @click="handleSubmit(3)">执行</el-button>
+                                </el-col>
+                                <el-col class="form-row">
+                                    <span class="label" style="width: auto; margin-right: 80px; ">存取金币</span>
+                                    <el-form-item label="低于取:">
+                                        <el-input v-model="form.carryScore.min"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="高于存:" style="width: auto; margin-right: 75px; margin-left: 70px; ">
+                                        <el-input v-model="form.carryScore.max"></el-input>
+                                    </el-form-item>
+                                    <el-button @click="handleSubmit(2)">执行</el-button>
                                 </el-col>
                             </el-row>
+
                         </el-form>
                         <div>
 
                         </div>
-                        <hr />
 
                     </div>
                 </div>
-                <span style="color: red;"></span>
 
             </el-form>
         </div>
@@ -171,10 +151,11 @@ export default {
             upRobotScore(robotContrlUpdate)
                 .then(() => {
                     this.getList()
-                    this.$modal.msgSuccess('执行成功')
-                })
-                .catch(() => {
-                    this.$modal.msgSuccess('执行失败')
+                    this.$message({
+                        showClose: true,
+                        message: '执行成功',
+                        type:'success'
+                    });
                 })
                 ,
                 //刷新当前数据
@@ -247,9 +228,15 @@ export default {
     border: 1px solid #ccc;
     /* 边框 */
     border-radius: 5px;
-    
-    flex: 1;  /* 使两个 div 充满父容器的宽度 */
+
+    flex: 1;
+    /* 使两个 div 充满父容器的宽度 */
     /* 圆角 */
+}
+
+.form-row {
+    margin-bottom: 50px;
+    /* 设置行间距，可以根据需要进行调整 */
 }
 
 /* 可以根据需要进一步添加样式 */
