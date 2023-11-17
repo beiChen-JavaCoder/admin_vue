@@ -172,7 +172,7 @@ export default {
         })
         .then(() => {
           this.getList()
-          this.$modal.msgSuccess('充值成功')
+          this.$modal.msgSuccess('充值成功,等待5分钟到账')
         })
         .catch(() => { })
         this.getList()
