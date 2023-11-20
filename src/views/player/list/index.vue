@@ -37,6 +37,16 @@
                             </el-col>
                         </div>
                     </el-form-item>
+                    <el-form-item prop="lastLogin" :span="6">
+                        <div class="block">
+                            <span class="form-item-span">是否在线</span>
+                            <el-select size="small" v-model="queryParams.isOnline" clearable placeholder="请选择">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </el-form-item>
                     <!-- <el-form-item prop="recharge" :span="6">
                         <div class="block">
                             <el-col :span="4">
@@ -69,7 +79,6 @@
                         <div>
                             <el-button size="mini" icon="el-icon-search" type="primary" @click="handleQuery">搜索</el-button>
                             <el-button size="mini" icon="el-icon-delete" @click="handleReset">重置</el-button>
-                            <el-button size="mini" type="danger" icon="el-icon-">导出</el-button>
                         </div>
                     </el-form-item>
                     <br />
@@ -80,7 +89,7 @@
                             <span class="form-item-span-span">, 总充值：</span>
                             <span class="form-item-span-font">{{ player.allRecharge }} </span>
                             <span class="form-item-span-span">IDR
-                               <!--  , 总输赢：</span>
+                                <!--  , 总输赢：</span>
                             <span class="form-item-span-font">{{ player.allWinningLosing }}</span>
                             <span class="form-item-span-span">, 当日总输赢：</span>
                             <span class="form-item-span-font">{{ player.todayWinningLosing }} -->
@@ -168,9 +177,23 @@ export default {
                 winningLosing: {
                     min: null,
                     max: null
-                }
+                },
+
+                isOnline: null
+
+
             },
-            total:0,
+            options: [
+                {
+                    value: 0,
+                    label: '离线'
+                },
+                {
+                    value: 1,
+                    label: '在线'
+                }
+            ],
+            total: 0,
             //搜索表单
             queryForm: {
 
@@ -213,12 +236,12 @@ export default {
             //注册时间
             siginTime: '',
             //最后登陆时间
-            lastTime: ''
+            lastTime: '',
         }
     },
     methods: {
         //重置搜索表单
-        handleReset(){
+        handleReset() {
             this.queryParams = {
                 //分页参数
                 pageNum: 1,
@@ -245,7 +268,8 @@ export default {
                     max: null
                 }
             }
-    },
+            this.getList();
+        },
         getList() {
             var query = {};
             query.pageNum = this.queryParams.pageNum;

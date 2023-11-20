@@ -1,28 +1,22 @@
 import request from '@/utils/request'
 
-
-export function downlineGame(gameIds) {
-    console.log("downlineGame", gameIds);
-    return request({
-        url: '/system/game/'+gameIds,
-        method: 'get',
-    })
-}
-export function gameList(data) {
+export function flowList(data) {
 
     const params = {
         attributes: {
+            rid: data.rid,
             pageNum: data.pageNum,
             pageSize: data.pageSize,
+            gameId: data.gameId,
         },
         objects: {
+            sectionTime: data.sectionTime
         }
     };
     return request({
-        url: '/system/game',
+        url: "/player/flow",
         method: 'post',
         data: params
-
-})
-
+    })
 }
+
