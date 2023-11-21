@@ -8,7 +8,8 @@
         <div>
             <el-table :data="tableData" style="width: 100%">
                 <el-table-column type="selection" width="55" />
-                <el-table-column prop="robotName" label="机器人名称" />
+                <el-table-column align="left" prop="id" label="ID" />
+                <el-table-column align="left" prop="robotName" label="机器人名称" />
                 <el-table-column label="操作" align="center" width="auto" class-name="small-padding fixed-width">
                     <template slot-scope="scope">
                         <el-button size="mini" type="text" icon="el-icon-edit"
@@ -45,7 +46,7 @@
             <el-dialog :title="title" :visible.sync="openUpload" width="600px" append-to-body>
                 <el-form>
                     <el-col>
-                        <span style="color: red;">文件上传格式:以,分隔仅支持txt文件
+                        <span style="color: red;">文件上传格式:以英文,分隔仅支持txt文件
                             <br />
                             例: 机器人1,机器人2,机器人3,机器人4
                         </span>
@@ -64,7 +65,7 @@
 </template>
 
 <script>
-import { robotList, robotUpdate, importData } from '@/api/game/robotlist/robotlist';
+import { robotList, robotUpdate, importData,delRobot } from '@/api/game/robotlist/robotlist';
 export default {
     data() {
         return {
@@ -122,11 +123,11 @@ export default {
         },
         /** 删除按钮操作 */
         handleDelete(row) {
-            const robotName = row.robotName || this.robotName
+            const robotId = row.id || this.id
             this.$modal
-                .confirm('是否确认删除机器人名称为"' + robotName + '"的数据项？')
+                .confirm('是否确认删除机器人名称为"' + row.robotName + '"的数据项？')
                 .then(function () {
-                    return delUser(robotName)
+                    return delRobot(robotId)
                 })
                 .then(() => {
                     this.getList()
@@ -136,6 +137,7 @@ export default {
         },
         getList() {
             robotList(this.queryParams).then((response) => {
+                console.log("List");
                 this.tableData = response.rows
                 this.total = response.total
                 this.loading = false
@@ -157,16 +159,15 @@ export default {
                     message: '导入成功',
                     type: 'success'
                 });
-                this.openUpload = false
-                this.getList();
-
                 // 处理上传成功后的逻辑
             }).catch(error => {
                 console.error('文件上传失败', error);
                 // 处理上传失败后的逻辑
             });
-
-            return false;  // 返回 false 阻止 Element UI 组件默认的上传行为
+            //关闭对话框
+            this.openUpload = false;
+            this.getList();
+            return true;  // 返回 false 阻止 Element UI 组件默认的上传行为
         },
 
 

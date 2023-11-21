@@ -7,9 +7,9 @@
                         <el-input v-model="queryParams.rid" placeholder="请输入用户rid" clearable size="small"
                             style="width: 100%" @keyup.enter.native="handleQuery" />
                     </el-form-item>
-                    <el-form-item prop="signIn" :span="6">
+                    <el-form-item :span="6">
                         <div class="block">
-                            <span class="demonstration">时间</span>
+                            <span class="form-item-span">时间</span>
                             <el-date-picker v-model="queryParams.sectionTime" type="daterange" align="right" unlink-panels
                                 range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                                 :picker-options="pickerOptions">
@@ -33,7 +33,8 @@
                             <el-button size="mini" icon="el-icon-delete" @click="reset">重置</el-button>
                         </div>
                     </el-form-item>
-                    <el-table :data="tableData">
+                    <el-table :data="tableData" @selection-change="handleSelectionChange" >
+                        <el-table-column type="selection" width="55" />
                         <el-table-column label="id" align="center" prop="id" />
                         <el-table-column label="时间" align="center" prop="createTime" />
                         <el-table-column label="rid" align="center" prop="rid" />
@@ -74,6 +75,8 @@ export default {
             games: {
 
             },
+            //多选框
+            ids:[],
             options: [
                 {
                     value: 0,
@@ -122,6 +125,13 @@ export default {
     },
 
     methods: {
+        // 多选框选中数据
+        handleSelectionChange(selection) {
+            this.ids = selection.map(item => item.id)
+            this.single = selection.length !== 1
+            this.multiple = !selection.length
+            console.log(this.ids);
+        },
         handleQuery() {
             var queryParams = this.queryParams
             this.getList(queryParams);

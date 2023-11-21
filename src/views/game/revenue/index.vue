@@ -11,7 +11,7 @@
               </el-form-item>
               <el-form-item prop="signIn" :span="6">
                 <div class="block">
-                  <span class="demonstration">时间</span>
+                  <span class="form-item-span">时间</span>
                   <el-date-picker v-model="queryParams.sectionTime" type="daterange" align="right" unlink-panels
                     range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
                   </el-date-picker>
@@ -25,9 +25,6 @@
             </el-form>
           </el-col>
         </el-row>
-
-
-
       </el-form>
     </div>
     <div>
@@ -106,4 +103,10 @@ export default {
   }
 };
 </script>
+<style>
+.form-item-span {
+    color: #606266;
+    font-weight: bold;
+}
+</style>
   

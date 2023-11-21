@@ -124,8 +124,6 @@ export default {
                 robotContrlUpdate.type = 0;
                 robotContrlUpdate.min = UpFrom.initScore.min;
                 robotContrlUpdate.max = UpFrom.initScore.max;
-                console.log("UpFrom.initScore.max");
-                console.log(UpFrom.initScore.max);
             } else if (type === 1) {
                 robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.betScore));
                 robotContrlUpdate.type = 1;

@@ -18,6 +18,15 @@ export function robotUpdate(robot){
         method: 'post',
         data:robot
     })
+}
+export function delRobot(robotId){
+
+    return request({
+        url: '/game/robot/list/'+robotId,
+        method: 'delete',
+    })
+
+    
 
 
 }

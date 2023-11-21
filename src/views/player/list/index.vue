@@ -98,7 +98,8 @@
                     </el-form-item>
 
 
-                    <el-table :data="tableData">
+                    <el-table :data="tableData" @selection-change="handleSelectionChange" >
+                        <el-table-column type="selection" width="55" />
                         <el-table-column label="用户rid" align="center" prop="rid" />
                         <el-table-column label="是否在线" align="center" prop="isOnline">
                             <template slot-scope="scope">
@@ -193,6 +194,7 @@ export default {
                     label: '在线'
                 }
             ],
+            ids:[],
             total: 0,
             //搜索表单
             queryForm: {
@@ -240,6 +242,13 @@ export default {
         }
     },
     methods: {
+        // 多选框选中数据
+        handleSelectionChange(selection) {
+            this.ids = selection.map(item => item.id)
+            this.single = selection.length !== 1
+            this.multiple = !selection.length
+            console.log(this.ids);
+        },
         //重置搜索表单
         handleReset() {
             this.queryParams = {
