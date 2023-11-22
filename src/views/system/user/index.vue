@@ -32,6 +32,23 @@
           <el-table-column prop="id" label="用户编号" align="center" />
           <el-table-column prop="userName" label="用户名称" align="center" />
           <el-table-column prop="nickName" label="用户昵称" align="center" />
+          <el-table-column prop="merchantEntId" label="商户ID" align="center">
+            <template slot-scope="scope">
+              <template v-if="scope.row.merchantEntId == null">
+                <template v-if="!binding[scope.row.id]">
+                  <!-- <el-button type="text" @click="bindMerchant(scope.row)">绑定</el-button> -->
+                  <span>未绑定</span>
+                </template>
+                <template v-else>
+                  <el-input v-model="scope.row.merchantEntId" placeholder="请输入商户ID"></el-input>
+                  <el-button type="text" @click="confirmBinding(scope.row)">确认</el-button>
+                </template>
+              </template>
+              <template v-else>
+                <span>{{ scope.row.merchantEntId }}</span>
+              </template>
+            </template>
+          </el-table-column>
           <!-- <el-table-column prop="phonenumber" label="手机号码" align="center" /> -->
           <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
@@ -42,7 +59,7 @@
           <el-table-column prop="createTime" label="创建时间" align="center" />
           <!-- 编号为1的用户无法操作 -->
           <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
-          
+
             <template v-if="scope.row.id !== 1" slot-scope="scope">
               <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
               <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
@@ -179,6 +196,8 @@ export default {
         password: undefined,
         status: undefined
       },
+      binding: {}, // 控制绑定状态
+      inputValue: '', // 输入框的值
       //控制商户对话框显示
       merchantReveal: true,
       title: '',
@@ -228,7 +247,7 @@ export default {
           { min: 5, max: 15, message: '提现比例长度必须介于 1 和 5 之间', trigger: 'blur' }
         ]
       },
-      
+
       // 角色选项
       roleOptions: [],
       // 显示搜索条件
@@ -280,6 +299,7 @@ export default {
         this.userList = response.rows
         this.total = response.total
         this.loading = false
+        console.log(this.userList);
       })
     },
     // 用户状态修改
@@ -313,6 +333,10 @@ export default {
         this.title = '修改用户'
         this.form.password = response.password
       })
+    },
+    //绑定商户
+    baningMerchant() {
+
     },
     handleChange(val) {
       if (val == 1) {
@@ -375,6 +399,16 @@ export default {
           }
         }
       })
+    },
+    bindMerchant(row) {
+      this.binding[row.id] = true; // 点击绑定按钮后，将当前行的绑定状态设为 true
+      row.merchantEntId = ''; // 清空输入框的值
+      console.log(this.binding,this.binding[row.id]);
+    },
+    confirmBinding(row) {
+      console.log(row.inputValue);
+      // 其他逻辑处理
+      this.binding[row.id] = false; // 处理完成后将当前行的绑定状态设为 false，恢复到绑定按钮状态
     }
   }
 }

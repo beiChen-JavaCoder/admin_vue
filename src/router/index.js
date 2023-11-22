@@ -211,7 +211,29 @@ export const constantRoutes = [
       component: () => import('@/views/player/flow'),
       hidden: true
     }]
-  }
+  },
+  //操作日志
+  {
+    path: '/system/log/operlog',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'operlog',
+      component: () => import('@/views/system/log/operlog'),
+      hidden: true
+    }]
+  },
+  //登录日志
+  {
+    path: '/system/log/logininfor',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: 'logininfor',
+      component: () => import('@/views/system/log/logininfor'),
+      hidden: true
+    }]
+  },
 ]
 
 const createRouter = () => new Router({
