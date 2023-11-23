@@ -46,8 +46,8 @@
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
-        <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange"
-            :default-sort="defaultSort" @sort-change="handleSortChange">
+        <el-table ref="tables" v-loading="loading" :data="list" 
+            :default-sort="defaultSort" >
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="访问编号" align="center" prop="infoId" />
             <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" sortable="custom"
@@ -56,11 +56,11 @@
             <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
             <el-table-column label="浏览器" align="center" prop="browser" :show-overflow-tooltip="true" />
             <el-table-column label="操作系统" align="center" prop="os" />
-            <el-table-column label="登录状态" align="center" prop="status">
+            <!-- <el-table-column label="登录状态" align="center" prop="status">
                 <template slot-scope="scope">
                     <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status" />
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="操作信息" align="center" prop="msg" :show-overflow-tooltip="true" />
             <el-table-column label="登录日期" align="center" prop="loginTime" sortable="custom"
                 :sort-orders="['descending', 'ascending']" width="180">
@@ -69,18 +69,21 @@
                 </template>
             </el-table-column>
         </el-table>
-
+        <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper"
+            :total="total" :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
+            @size-change="getList" />
         <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
             @pagination="getList" />
     </div>
 </template>
 
 <script>
+import { list } from "@/api/system/log/logininfor";
 export default {
     dicts: ['sys_common_status'],
     data() {
-        return {
-              // 遮罩层
+    return {
+      // 遮罩层
       loading: true,
       // 选中数组
       ids: [],
@@ -95,7 +98,9 @@ export default {
       // 总条数
       total: 0,
       // 表格数据
-      list: [],
+      list: [
+        
+      ],
       // 日期范围
       dateRange: [],
       // 默认排序
@@ -108,14 +113,13 @@ export default {
         userName: undefined,
         status: undefined
       }
-
-        }
-    },
-
-
-
-    methods: {
-          /** 查询登录日志列表 */
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    /** 查询登录日志列表 */
     getList() {
       this.loading = true;
       list(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
@@ -125,8 +129,67 @@ export default {
         }
       );
     },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.dateRange = [];
+      this.resetForm("queryForm");
+      this.queryParams.pageNum = 1;
+      this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
+    },
+    /** 多选框选中数据 */
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.infoId)
+      this.single = selection.length!=1
+      this.multiple = !selection.length
+      this.selectName = selection.map(item => item.userName);
+    },
+    /** 排序触发事件 */
+    handleSortChange(column, prop, order) {
+      this.queryParams.orderByColumn = column.prop;
+      this.queryParams.isAsc = column.order;
+      this.getList();
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const infoIds = row.infoId || this.ids;
+      this.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项？').then(function() {
+        return delLogininfor(infoIds);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
+    },
+    /** 清空按钮操作 */
+    handleClean() {
+      this.$modal.confirm('是否确认清空所有登录日志数据项？').then(function() {
+        return cleanLogininfor();
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("清空成功");
+      }).catch(() => {});
+    },
+    /** 解锁按钮操作 */
+    handleUnlock() {
+      const username = this.selectName;
+      this.$modal.confirm('是否确认解锁用户"' + username + '"数据项?').then(function() {
+        return unlockLogininfor(username);
+      }).then(() => {
+        this.$modal.msgSuccess("用户" + username + "解锁成功");
+      }).catch(() => {});
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('monitor/logininfor/export', {
+        ...this.queryParams
+      }, `logininfor_${new Date().getTime()}.xlsx`)
     }
-    }
+  }
+};
 </script>
 
 <style lang="scss" scoped></style>

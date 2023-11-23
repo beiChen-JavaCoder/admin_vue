@@ -2,7 +2,6 @@ import request from '@/utils/request'
 
 
 export function downlineGame(gameIds) {
-    console.log("downlineGame", gameIds);
     return request({
         url: '/system/game/'+gameIds,
         method: 'get',
