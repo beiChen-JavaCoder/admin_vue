@@ -18,6 +18,9 @@ import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, 
 
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+// 字典数据组件
+import DictData from '@/components/DictData'
+DictData.install()
 // 全局方法挂载
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
@@ -25,6 +28,7 @@ Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.handleTree = handleTree
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
