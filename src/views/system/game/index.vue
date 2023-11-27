@@ -1,7 +1,23 @@
 <template>
-    <div>
+    <div class="app-container">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+
+            <el-form-item label="游戏名称" prop="gameName">
+                <el-input v-model="queryParams.gameName" placeholder="请输入游戏名称" clearable style="width: 240px;"
+                    @keyup.enter.native="handleQuery" />
+            </el-form-item>
+            <el-form-item label="状态" prop="active">
+        <el-select v-model="queryParams.active" placeholder="状态" clearable style="width: 240px">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </el-form-item>
+            <el-form-item>
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+                <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-form-item>
+        </el-form>
         <el-col :span="24" :xs="24">
-            <el-table :data="tableData" @selection-change="handleSelectionChange">
+            <el-table :data="tableData" >
                 <el-table-column type="selection" width="55" />
                 <el-table-column label="id" align="left" prop="id" />
                 <el-table-column label="游戏名称" align="left" prop="gameName" />
@@ -16,7 +32,7 @@
                     <template slot-scope="scope">
                         <el-button size="mini" type="text" icon="el-icon-delete"
                             @click="handleturn(scope.row)">关闭</el-button>
-                            <el-button size="mini" type="text" icon="el-icon-delete"
+                        <el-button size="mini" type="text" icon="el-icon-delete"
                             @click="handledelet(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -30,27 +46,52 @@
 </template>
 
 <script>
-import { gameList, downlineGame } from '@/api/system/game';
+import { gameList, turnGame, deletGame } from '@/api/system/game';
 export default {
     data() {
         return {
             ids: [],
+            //游戏数据
             tableData: [{}],
+            //搜索栏
             queryParams: {
 
                 pageNum: 1,
                 pageSize: 10,
-            }
+                gameName:'',
+                active:null,
+            },
+            total: 0,
+            showSearch: true,
+            options:[
+                {
+                    value:true,
+                    label : "正常"
+                },
+                {
+                    value:false,
+                    label:"下线"
+                }
+            ]
         }
     },
     methods: {
+        //重置按钮
+        resetQuery(){
+            this.queryParams = {
+                pageNum: 1,
+                pageSize: 10,
+                gameName: null,
+                gameId: null,
+                active: null,
+            };
+        },
+        //搜索按钮
+        handleQuery(){
 
-        // 多选框选中数据
-        handleSelectionChange(selection) {
-            this.ids = selection.map(item => item.id)
-            this.single = selection.length !== 1
-            this.multiple = !selection.length
-            console.log(this.ids);
+            this.getList();
+
+
         },
         //关闭游戏
         handleturn(game) {
@@ -59,7 +100,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                downlineGame(game.id).then(() => {
+                turnGame(game.id).then(() => {
                     this.$message({
                         type: 'success',
                         message: '关闭成功!'
@@ -71,8 +112,33 @@ export default {
                     message: '已取消关闭'
                 });
             });
+            //刷新
+            this.getList();
         },
         //删除游戏
+        handledelet(game) {
+            this.$confirm('此操作將刪除' + game.gameName + '是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                deletGame(game.id).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!',
+                    })
+                })
+            })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除',
+
+                    })
+                })
+            //刷新
+            this.getList();
+        },
         getList() {
             gameList(this.queryParams).then((response) => {
 

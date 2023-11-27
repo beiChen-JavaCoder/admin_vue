@@ -57,7 +57,7 @@
                                     </el-form-item>
                                     <span style="margin-right: 50px; color: #606266; ">秒</span>
                                     <el-form-item label="最大区间:">
-                                        <el-input v-model="form.betTime.max"></el-input> 
+                                        <el-input v-model="form.betTime.max"></el-input>
                                     </el-form-item>
                                     <span style="margin-right: 50px; color: #606266; ">秒</span>
                                     <el-button @click="handleSubmit(3)">执行</el-button>
@@ -71,6 +71,16 @@
                                         <el-input v-model="form.carryScore.max"></el-input>
                                     </el-form-item>
                                     <el-button @click="handleSubmit(2)">执行</el-button>
+                                </el-col>
+                                <el-col class="form-row">
+                                    <span class="label" style="width: auto; margin-right: 65px; ">机器人数量</span>
+                                    <el-form-item label="最少:">
+                                        <el-input v-model="form.inRoomNum.min"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="最多:" style="width: auto; margin-right: 75px; margin-left: 70px; ">
+                                        <el-input v-model="form.inRoomNum.max"></el-input>
+                                    </el-form-item>
+                                    <el-button @click="handleSubmit(5)">执行</el-button>
                                 </el-col>
                             </el-row>
 
@@ -143,16 +153,20 @@ export default {
             } else if (type === 4) {
                 robotContrlUpdate.betRatio = UpFrom.betRatio
                 robotContrlUpdate.type = 4;
+            } else if (type === 5) {
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.inRoomNum));
+                robotContrlUpdate.type = 5;
+                robotContrlUpdate.min = UpFrom.inRoomNum.min;
+                robotContrlUpdate.max = UpFrom.inRoomNum.max;
             }
             robotContrlUpdate.gameId = UpFrom.gameId;
-
             upRobotScore(robotContrlUpdate)
                 .then(() => {
                     this.getList()
                     this.$message({
                         showClose: true,
                         message: '执行成功',
-                        type:'success'
+                        type: 'success'
                     });
                 })
                 ,

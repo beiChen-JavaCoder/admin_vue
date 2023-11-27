@@ -34,20 +34,20 @@
           <el-table-column prop="nickName" label="用户昵称" align="center" />
           <el-table-column prop="merchantEntId" label="商户ID" align="center">
             <template slot-scope="scope">
+
               <template v-if="scope.row.merchantEntId == null">
-                <template v-if="!binding[scope.row.id]">
-                  <!-- <el-button type="text" @click="bindMerchant(scope.row)">绑定</el-button> -->
-                  <span>未绑定</span>
-                </template>
-                <template v-else>
-                  <el-input v-model="scope.row.merchantEntId" placeholder="请输入商户ID"></el-input>
-                  <el-button type="text" @click="confirmBinding(scope.row)">确认</el-button>
-                </template>
+                <!-- <el-button type="text" @click="bindMerchant(scope.row)">绑定</el-button> -->
+                <el-tag type="danger">未绑定</el-tag>
               </template>
+
               <template v-else>
-                <span>{{ scope.row.merchantEntId }}</span>
+                <el-tag type="">{{scope.row.merchantEntId}}</el-tag>
+
               </template>
+
             </template>
+
+
           </el-table-column>
           <!-- <el-table-column prop="phonenumber" label="手机号码" align="center" /> -->
           <el-table-column prop="status" label="状态" align="center">
@@ -72,7 +72,7 @@
       :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
       @size-change="getList" />
     <!-- 添加或修改参数配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" @visible-change="handleClose" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
@@ -122,37 +122,37 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <div v-if="!merchantReveal">
+        <div>
           <el-row>
-            <div class="dialog-header">
+            <div class="dialog-header" >
               <div class="dialog-header-title" style="font-size: inherit; font-weight: inherit; color: inherit;">绑定商户信息
               </div>
             </div>
             <br>
             <el-col :span="12">
-              <el-form-item label="商户名称" prop="merchantName">
-                <el-input v-model="form.merchantName" placeholder="请输入商户名" maxlength="30" />
+              <el-form-item label="商户名称">
+                <el-input   v-model="form.merchantName" placeholder="请输入商户名" maxlength="30" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="提现比例" prop="ratio">
-                <el-input v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
+              <el-form-item label="提现比例">
+                <el-input  v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="QQ" prop="qq">
+              <el-form-item label="QQ">
                 <el-input v-model="form.qq" placeholder="请输入QQ" maxlength="30" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="微信" prop="wx">
+              <el-form-item label="微信">
                 <el-input v-model="form.wx" placeholder="请输入微信" maxlength="30" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="YY" prop="wx">
+              <el-form-item label="YY">
                 <el-input v-model="form.yy" placeholder="请输入YY" maxlength="30" />
               </el-form-item>
             </el-col>
@@ -203,7 +203,6 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
-      openMerchant: false,
       // 表单校验
       rules: {
         userName: [
@@ -262,7 +261,6 @@ export default {
       ids: [],
       // 表单参数
       form: {
-        merchantEntity: {}
 
       }
     }
@@ -272,6 +270,9 @@ export default {
     this.getList()
   },
   methods: {
+    handleClose() {
+      console.log(this.merchantReveal);
+    },
     //当焦点离开更新表单密码
     handleBlur() {
       this.form.password = this.updatePassword
@@ -290,6 +291,8 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false
+      this.merchantReveal = false
+      console.log(this.merchantReveal);
       this.reset()
     },
     /** 查询用户列表 */
@@ -326,12 +329,17 @@ export default {
         this.form = response.user
         this.roleOptions = response.roles
         this.form.roleIds = response.roleIds
-        if (response.user.type == 1) {
-          this.merchantReveal = true
-        }
         this.open = true
         this.title = '修改用户'
         this.form.password = response.password
+        this.form.merchantEntity = response.merchantEntity
+        console.log(this.form.merchantEntity);
+        this.form.merchantName = response.merchantEntity.merchantName
+        this.form.qq = response.merchantEntity.qq
+        this.form.ratio = response.merchantEntity.ratio
+        this.form.wx = response.merchantEntity.wx
+        this.form.yy = response.merchantEntity.yy
+
       })
     },
     //绑定商户
@@ -351,13 +359,18 @@ export default {
         password: undefined,
         status: '0',
         remark: undefined,
-        roleIds: []
+        roleIds: [],
+        merchantName: '',
+        qq: '',
+        ratio: '',
+        wx: '',
+        yy: ''
       }
       this.resetForm('form')
     },
     /** 新增用户 */
     handleAdd() {
-      this.merchantReveal = false
+      //打开商户对话框
       this.reset()
       listAllRole().then((response) => {
         this.roleOptions = response
@@ -403,7 +416,7 @@ export default {
     bindMerchant(row) {
       this.binding[row.id] = true; // 点击绑定按钮后，将当前行的绑定状态设为 true
       row.merchantEntId = ''; // 清空输入框的值
-      console.log(this.binding,this.binding[row.id]);
+      console.log(this.binding, this.binding[row.id]);
     },
     confirmBinding(row) {
       console.log(row.inputValue);

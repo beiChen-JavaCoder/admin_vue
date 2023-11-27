@@ -180,7 +180,7 @@ export default {
                 {
                     label: "新增",
                     value: 1,
-                    type: "info"
+                    type: ""
                 },
                 {
                     label: "修改",
@@ -200,7 +200,7 @@ export default {
                 {
                     label: "导出",
                     value: 5,
-                    type: "info"
+                    type: "danger"
                 },
                 {
                     label: "导入",
