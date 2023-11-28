@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
-export function listRevenue() {
+export function listRevenue(data) {
 
     return request({
-        url: '/revenue',
-        method: 'get'
+        url: '/player/revenue',
+        method: 'post',
+        data: data
     })
 }
 

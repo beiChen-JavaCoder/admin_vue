@@ -34,17 +34,11 @@
           <el-table-column prop="nickName" label="用户昵称" align="center" />
           <el-table-column prop="merchantEntId" label="商户ID" align="center">
             <template slot-scope="scope">
-
-              <template v-if="scope.row.merchantEntId == null">
-                <!-- <el-button type="text" @click="bindMerchant(scope.row)">绑定</el-button> -->
-                <el-tag type="danger">未绑定</el-tag>
+              <template>
+                <el-tag type="" v-if="typeof scope.row.merchantEntId !== 'undefined' && scope.row.merchantEntId !== 0">{{
+                  scope.row.merchantEntId }}</el-tag>
+                <el-tag type="danger" v-else>未绑定</el-tag>
               </template>
-
-              <template v-else>
-                <el-tag type="">{{scope.row.merchantEntId}}</el-tag>
-
-              </template>
-
             </template>
 
 
@@ -61,6 +55,9 @@
           <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
 
             <template v-if="scope.row.id !== 1" slot-scope="scope">
+              <template v-if="typeof scope.row.merchantEntId == 'undefined' || scope.row.merchantEntId == 0">
+                <el-button size="mini" type="text" icon="el-icon-edit" @click="handlebing(scope.row)">绑定</el-button>
+              </template>
               <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
               <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
             </template>
@@ -124,46 +121,59 @@
         </el-row>
         <div>
           <el-row>
-            <div class="dialog-header" >
+            <div class="dialog-header">
               <div class="dialog-header-title" style="font-size: inherit; font-weight: inherit; color: inherit;">绑定商户信息
               </div>
             </div>
             <br>
             <el-col :span="12">
               <el-form-item label="商户名称">
-                <el-input   v-model="form.merchantName" placeholder="请输入商户名" maxlength="30" />
+                <el-input :disabled="disabled" v-model="form.merchantName" placeholder="请输入商户名" maxlength="30" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="提现比例">
-                <el-input  v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
+                <el-input :disabled="disabled" v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="QQ">
-                <el-input v-model="form.qq" placeholder="请输入QQ" maxlength="30" />
+                <el-input :disabled="disabled" v-model="form.qq" placeholder="请输入QQ" maxlength="30" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="微信">
-                <el-input v-model="form.wx" placeholder="请输入微信" maxlength="30" />
+                <el-input :disabled="disabled" v-model="form.wx" placeholder="请输入微信" maxlength="30" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="YY">
-                <el-input v-model="form.yy" placeholder="请输入YY" maxlength="30" />
+                <el-input :disabled="disabled" v-model="form.yy" placeholder="请输入YY" maxlength="30" />
               </el-form-item>
             </el-col>
           </el-row>
         </div>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="title" :visible.sync="openBinding" width="600px" append-to-body>
+      <el-form :ref="bindingForm" :model="bindingForm">
+        <el-form-item :span="12">
+          <el-input v-model="bindingForm.merchantId" placeholder="请输入商户编号"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="bindingMerchant">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -175,17 +185,21 @@ import {
   delUser,
   addUser,
   updateUser,
-  changeUserStatus
+  changeUserStatus,
+  changeUserMerchant
 }
   from '@/api/system/user'
 import {
-  listAllRole
+  listAllRole,
+
 }
   from '@/api/system/role'
 export default {
   name: 'User',
   data() {
     return {
+      //商户模块输入框
+      disabled: false,
       // 查询参数
       showUpdatePassword: false,
       updatePassword: undefined,
@@ -203,6 +217,8 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      //是否弹出binding层
+      openBinding: false,
       // 表单校验
       rules: {
         userName: [
@@ -260,9 +276,13 @@ export default {
       // 选中数组
       ids: [],
       // 表单参数
-      form: {
-
-      }
+      form: {},
+      //绑定表单
+      bindingForm: {
+        merchantEntId: ''
+      },
+      //对话框类型
+      dialogType: null
     }
   },
   watch: {},
@@ -270,6 +290,22 @@ export default {
     this.getList()
   },
   methods: {
+    //绑定商户按钮
+    handlebing(row) {
+      //打开对话框
+      this.disabled = true;
+      this.bindingForm = row;
+      this.openBinding = true;
+    },
+    //提交绑定
+    bindingMerchant() {
+      changeUserMerchant(this.bindingForm).then(() => {
+        this.getList()
+        this.openBinding = false;
+        this.$message.success('绑定成功');
+
+      })
+    },
     handleClose() {
       console.log(this.merchantReveal);
     },
@@ -279,7 +315,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1
+      this.queryParams.pafalse
       this.getList()
     },
     // 多选框选中数据
@@ -291,8 +327,8 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false
+      this.openBinding = false
       this.merchantReveal = false
-      console.log(this.merchantReveal);
       this.reset()
     },
     /** 查询用户列表 */
@@ -302,7 +338,6 @@ export default {
         this.userList = response.rows
         this.total = response.total
         this.loading = false
-        console.log(this.userList);
       })
     },
     // 用户状态修改
@@ -322,7 +357,8 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-
+      //判断类型打开修改对话框
+      this.dialogType = true
       this.reset()
       const id = row.id || this.ids
       getUser(id).then((response) => {
@@ -333,7 +369,6 @@ export default {
         this.title = '修改用户'
         this.form.password = response.password
         this.form.merchantEntity = response.merchantEntity
-        console.log(this.form.merchantEntity);
         this.form.merchantName = response.merchantEntity.merchantName
         this.form.qq = response.merchantEntity.qq
         this.form.ratio = response.merchantEntity.ratio
@@ -341,6 +376,8 @@ export default {
         this.form.yy = response.merchantEntity.yy
 
       })
+      this.disabled = true;
+
     },
     //绑定商户
     baningMerchant() {
@@ -378,6 +415,7 @@ export default {
         this.title = '添加用户'
 
       })
+      this.disabled = false;
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -412,16 +450,6 @@ export default {
           }
         }
       })
-    },
-    bindMerchant(row) {
-      this.binding[row.id] = true; // 点击绑定按钮后，将当前行的绑定状态设为 true
-      row.merchantEntId = ''; // 清空输入框的值
-      console.log(this.binding, this.binding[row.id]);
-    },
-    confirmBinding(row) {
-      console.log(row.inputValue);
-      // 其他逻辑处理
-      this.binding[row.id] = false; // 处理完成后将当前行的绑定状态设为 false，恢复到绑定按钮状态
     }
   }
 }

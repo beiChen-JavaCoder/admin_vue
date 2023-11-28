@@ -19,7 +19,7 @@
         <el-col :span="24" :xs="24">
             <el-table :data="tableData" >
                 <el-table-column type="selection" width="55" />
-                <el-table-column label="id" align="left" prop="id" />
+                <el-table-column label="游戏编号" align="left" prop="gameId" />
                 <el-table-column label="游戏名称" align="left" prop="gameName" />
                 <el-table-column label="状态" align="left" prop="isActive">
                     <template slot-scope="scope">

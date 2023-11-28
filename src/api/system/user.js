@@ -64,3 +64,17 @@ export function changeUserStatus(userId, status) {
     data: data
   })
 }
+
+// 用户状态修改
+export function changeUserMerchant(from) {
+
+  const data = {
+    userId: from.id,
+    merchantId: from.merchantId
+  }
+  return request({
+    url: '/system/user/binding',
+    method: 'put',
+    data: data
+  })
+}

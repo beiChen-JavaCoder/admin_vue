@@ -16,6 +16,13 @@ export function listItem(query) {
     params: query
   })
 }
+//获取税收百分比
+export function merchantRatio() {
+  return request({
+    url: '/merchant/merchantRatio',
+    method: 'get'
+  })
+}
 
 
 // 删除商户
@@ -35,7 +42,7 @@ export function search(query) {
     }
   )
 }
-export function sellMerchant(from){
+export function sellMerchant(from) {
   return request(
     {
       url: '/insertMerchant',

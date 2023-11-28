@@ -7,7 +7,7 @@
 
             <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
               <el-form-item>
-                <span  style="color: red; font-size: large;">税收百分比:{{ percent }}</span>
+                <span  style="color: red; font-size: large;">税收百分比:{{ taxPercentage }}</span>
               </el-form-item>
               <el-form-item prop="signIn" :span="6">
                 <div class="block">
@@ -30,7 +30,7 @@
     <div>
       <el-table :data="tableData">
         <el-table-column label="id" align="left" prop="id" />
-        <el-table-column label="日期" align="left" prop="time" />
+        <el-table-column label="日期" align="left" prop="sectionTime" />
         <el-table-column label="税收金额" align="left" prop="num" />
       </el-table>
     </div>
@@ -39,12 +39,20 @@
 </template>
   
 <script>
+import { merchantRatio } from "@/api/content/item";
+import { listRevenue } from "@/api/game/revenue";
+
 export default {
   data() {
     return {
       //税收百分比
-      percent: 100,
+      merchant:{
+        ratio: '',
+
+      },
       queryParams: {
+        pageNum: 1,
+        pageSize:10,
         time: null
       },
       tableData: [
@@ -91,15 +99,32 @@ export default {
   },
   methods:{
     getList(){
-      listRevenue().then((response)=>{
+      listRevenue(this.queryParams).then((response)=>{
         this.tableData = response.rows;
         this.total = response.total;
 
       })
     },
+    //获取税收百分比
+    getMerchant(){
+      merchantRatio().then((response)=>{
+        this.merchant = response
+        console.log(response.ratio);
+      })
+    },
     handleQuery(){
 
     }
+  },
+  computed: {
+    taxPercentage() {
+      return (this.merchant.ratio / 10000 * 100).toFixed(2) + '%';
+    }
+  },
+  created(){
+    this.getList();
+    this.getMerchant();
+
   }
 };
 </script>
