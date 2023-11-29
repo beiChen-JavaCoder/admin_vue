@@ -31,6 +31,24 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
+  //   {
+  //   path: '/',
+  //   redirect: '/home'
+  // },
+  // {
+  //   path: '/404',
+  //   name: 'NotFound',
+  //   meta: {
+  //     title: 'Page not found',
+  //     isLogin: false
+  //   },
+  //   component: () => import('@/views/error/index')
+  // },
+  // // 所有未定义路由，全部重定向到404页
+  // {
+  //   path: '*',
+  //   redirect: '/404'
+  // },
   {
     path: '/login',
     component: () => import('@/views/login/index'),
@@ -105,12 +123,12 @@ export const constantRoutes = [
   },
   //商户充值
   {
-    path: '/content/role',
+    path: '/content/charge',
     component: Layout,
     children: [{
       path: '/',
-      name: 'role',
-      component: () => import('@/views/content/role'),
+      name: 'charge',
+      component: () => import('@/views/content/charge'),
       hidden: true
     }]
   },

@@ -7,19 +7,20 @@
 
             <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
               <el-form-item>
-                <span  style="color: red; font-size: large;">税收百分比:{{ taxPercentage }}</span>
+                <span style="color: red; font-size: large;">税收百分比:{{ taxPercentage }}</span>
               </el-form-item>
               <el-form-item prop="signIn" :span="6">
                 <div class="block">
                   <span class="form-item-span">时间</span>
-                  <el-date-picker v-model="queryParams.sectionTime" type="daterange" align="right" unlink-panels
+                  <el-date-picker size="mini" v-model="queryParams.searchTime" type="daterange" align="right" unlink-panels
                     range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
                   </el-date-picker>
                 </div>
               </el-form-item>
               <el-form-item>
                 <div>
-                  <el-button size="small" icon="el-icon-search" type="primary" @click="handleQuery">立即查询</el-button>
+                  <el-button size="mini" icon="el-icon-search" type="primary" @click="handleQuery">立即查询</el-button>
+                  <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
                 </div>
               </el-form-item>
             </el-form>
@@ -34,7 +35,9 @@
         <el-table-column label="税收金额" align="left" prop="num" />
       </el-table>
     </div>
-
+    <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+      :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
+      @size-change="getList" />
   </div>
 </template>
   
@@ -46,26 +49,16 @@ export default {
   data() {
     return {
       //税收百分比
-      merchant:{
+      merchant: {
         ratio: '',
 
       },
       queryParams: {
         pageNum: 1,
-        pageSize:10,
-        time: null
+        pageSize: 10,
       },
+      total: 0,
       tableData: [
-        {
-          id: "1",
-          time: "1",
-          num: "1",
-        },
-        {
-          id: "2",
-          time: "2",
-          num: "2",
-        }
       ],
       //时间选择器
       pickerOptions: {
@@ -97,31 +90,38 @@ export default {
       },
     };
   },
-  methods:{
-    getList(){
-      listRevenue(this.queryParams).then((response)=>{
+  methods: {
+    getList() {
+      listRevenue(this.queryParams).then((response) => {
         this.tableData = response.rows;
         this.total = response.total;
 
       })
     },
     //获取税收百分比
-    getMerchant(){
-      merchantRatio().then((response)=>{
+    getMerchant() {
+      merchantRatio().then((response) => {
         this.merchant = response
         console.log(response.ratio);
       })
     },
-    handleQuery(){
-
-    }
+    //查詢按鈕
+    handleQuery() {
+      this.getList()
+    },
+    //重置按鈕
+    resetQuery(){
+      this.queryParams = {
+        searchTime:null
+      };
+    },
   },
   computed: {
     taxPercentage() {
       return (this.merchant.ratio / 10000 * 100).toFixed(2) + '%';
     }
   },
-  created(){
+  created() {
     this.getList();
     this.getMerchant();
 
@@ -130,8 +130,8 @@ export default {
 </script>
 <style>
 .form-item-span {
-    color: #606266;
-    font-weight: bold;
+  color: #606266;
+  font-weight: bold;
 }
 </style>
   

@@ -27,6 +27,9 @@ export default {
   },
   methods: {
     test() {
+      var num = "1";
+      const Number = num*1000;
+      console.log("Number of"+Number);
       test().then(() =>{
       console.log("测试111111");
     })

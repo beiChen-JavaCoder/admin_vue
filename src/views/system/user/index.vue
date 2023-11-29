@@ -112,9 +112,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择" @change="handleChange">
-                <el-option v-for="item in roleOptions" :key="item.id" :label="item.roleName" :value="item.id"
-                  :disabled="item.status == 1" />
+              <el-select v-model="form.roleIds" multiple placeholder="请选择角色" @change="hhh">
+                <el-option 
+                v-for=" item in roleOptions" 
+                :key="item.id" 
+                :label="item.roleName" 
+                :value="item.id" 
+                :disabled="item.status === 1" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -276,13 +280,16 @@ export default {
       // 选中数组
       ids: [],
       // 表单参数
-      form: {},
+      form: {
+      },
       //绑定表单
       bindingForm: {
         merchantEntId: ''
       },
       //对话框类型
-      dialogType: null
+      dialogType: null,
+      //角色组
+      roleIds:[]
     }
   },
   watch: {},
@@ -290,6 +297,11 @@ export default {
     this.getList()
   },
   methods: {
+    hhh() {
+      console.log("form", this.form);
+      console.log("hh", this.form.hh);
+
+    },
     //绑定商户按钮
     handlebing(row) {
       //打开对话框
@@ -357,14 +369,13 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      //判断类型打开修改对话框
-      this.dialogType = true
+
       this.reset()
       const id = row.id || this.ids
       getUser(id).then((response) => {
         this.form = response.user
         this.roleOptions = response.roles
-        this.form.roleIds = response.roleIds
+        this.$set(this.form, "roleIds", response.roleIds);
         this.open = true
         this.title = '修改用户'
         this.form.password = response.password
@@ -374,7 +385,7 @@ export default {
         this.form.ratio = response.merchantEntity.ratio
         this.form.wx = response.merchantEntity.wx
         this.form.yy = response.merchantEntity.yy
-
+        console.log("roleOptions",this.roleOptions);
       })
       this.disabled = true;
 
@@ -382,10 +393,6 @@ export default {
     //绑定商户
     baningMerchant() {
 
-    },
-    handleChange(val) {
-      if (val == 1) {
-      }
     },
     // 表单重置
     reset() {
@@ -413,6 +420,7 @@ export default {
         this.roleOptions = response
         this.open = true
         this.title = '添加用户'
+        console.log(this.roleOptions);
 
       })
       this.disabled = false;
@@ -433,6 +441,7 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function () {
+
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.id !== undefined) {

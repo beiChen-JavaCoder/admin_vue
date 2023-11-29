@@ -159,6 +159,7 @@ export default {
                     message: '导入成功',
                     type: 'success'
                 });
+                this.getList();
                 // 处理上传成功后的逻辑
             }).catch(error => {
                 console.error('文件上传失败', error);
