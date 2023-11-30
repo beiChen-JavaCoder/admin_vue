@@ -3,7 +3,8 @@
         <div>
         </div>
         <div class="child">
-            <el-form :inline="true" ref="pageUserControls" :modal="pageUserControls" :rules="rules.game">
+            <el-form v-loading.fullscreen.lock="loading" :inline="true" ref="pageUserControls" :modal="pageUserControls"
+                :rules="rules.game">
                 <br />
                 <div label="机器人控制" style="position: relative">
                     <div label="游戏信息">
@@ -105,7 +106,7 @@ export default {
         return {
             // 可以在这里定义一些需要用到的数据
 
-            loading: true,
+            loading: false,
 
             pageUserControls: [],
             ptps: [],
@@ -192,14 +193,17 @@ export default {
             return false;  // 返回 false 阻止 Element UI 组件默认的上传行为
         },
         getList() {
+            this.loading = true;
+
             listGame().then(response => {
 
                 this.games = response.rows;
                 this.total = response.total;
                 this.game = this.games[0];
                 this.form = this.games[0];
+                this.loading = false;
             });
-            this.loading = false;
+
         }
     },
     created() {

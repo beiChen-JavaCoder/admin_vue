@@ -82,6 +82,8 @@ export default {
   name: 'Item',
   data() {
     return {
+      //遮蔽层
+      loading :true,
       title: '',
       value: '',
       tableData: [
@@ -94,7 +96,6 @@ export default {
         gold: 0,
         totalGold: 0
       },
-      loading: false,
       // 查询参数
       queryParams: {
         name: undefined,
@@ -119,7 +120,7 @@ export default {
 
     }
   },
-  // loading: false,
+  loading: true,
   watch: {},
   created() {
     this.getList()
@@ -136,6 +137,7 @@ export default {
       this.multiple = !selection.length
     },
     getList() {
+      this.loading = true;
       listRole(this.queryParams).then((response) => {
         this.tableData = response.rows
         this.total = response.total

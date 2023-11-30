@@ -159,7 +159,8 @@ export default {
       }
     }
   },
-  // loading: false,
+  //遮蔽层
+  loading: true,
   watch: {},
   created() {
     this.getList()
@@ -173,6 +174,7 @@ export default {
       this.multiple = !selection.length
     },
     getList() {
+      this.loading = true;
       listItem(this.queryParams).then((response) => {
         this.tableData = response.rows
         this.total = response.total

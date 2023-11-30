@@ -17,7 +17,7 @@
             </el-form-item>
         </el-form>
         <el-col :span="24" :xs="24">
-            <el-table :data="tableData" >
+            <el-table v-loading="loading" :data="tableData" >
                 <el-table-column type="selection" width="55" />
                 <el-table-column label="游戏编号" align="left" prop="gameId" />
                 <el-table-column label="游戏名称" align="left" prop="gameName" />
@@ -50,6 +50,8 @@ import { gameList, turnGame, deletGame } from '@/api/system/game';
 export default {
     data() {
         return {
+            //遮蔽层
+            loading: true,
             ids: [],
             //游戏数据
             tableData: [{}],
@@ -140,10 +142,12 @@ export default {
             this.getList();
         },
         getList() {
+            this.loading = true;
             gameList(this.queryParams).then((response) => {
 
                 this.tableData = response.rows;
                 this.total = response.total;
+                this.loading = false;
             })
         },
     },

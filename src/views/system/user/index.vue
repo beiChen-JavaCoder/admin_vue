@@ -27,7 +27,7 @@
           </el-col>
         </el-row>
 
-        <el-table :data="userList" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :data="userList" style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />
           <el-table-column prop="id" label="用户编号" align="center" />
           <el-table-column prop="userName" label="用户名称" align="center" />
@@ -345,7 +345,6 @@ export default {
     },
     /** 查询用户列表 */
     getList() {
-      this.loading = true
       listUser(this.queryParams).then((response) => {
         this.userList = response.rows
         this.total = response.total
@@ -385,7 +384,6 @@ export default {
         this.form.ratio = response.merchantEntity.ratio
         this.form.wx = response.merchantEntity.wx
         this.form.yy = response.merchantEntity.yy
-        console.log("roleOptions",this.roleOptions);
       })
       this.disabled = true;
 

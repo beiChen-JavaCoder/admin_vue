@@ -29,7 +29,7 @@
       </el-form>
     </div>
     <div>
-      <el-table :data="tableData">
+      <el-table v-loading="loading" :data="tableData">
         <el-table-column label="id" align="left" prop="id" />
         <el-table-column label="日期" align="left" prop="sectionTime" />
         <el-table-column label="税收金额" align="left" prop="num" />
@@ -48,6 +48,8 @@ import { listRevenue } from "@/api/game/revenue";
 export default {
   data() {
     return {
+      //遮蔽层
+      loading: true,
       //税收百分比
       merchant: {
         ratio: '',
@@ -92,10 +94,11 @@ export default {
   },
   methods: {
     getList() {
+      this.loading = true;
       listRevenue(this.queryParams).then((response) => {
         this.tableData = response.rows;
         this.total = response.total;
-
+        this.loading = false;
       })
     },
     //获取税收百分比

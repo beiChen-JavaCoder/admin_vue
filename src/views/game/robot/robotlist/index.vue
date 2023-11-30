@@ -6,7 +6,7 @@
 
         </div>
         <div>
-            <el-table :data="tableData" style="width: 100%">
+            <el-table v-loading="loading" :data="tableData" style="width: 100%">
                 <el-table-column type="selection" width="55" />
                 <el-table-column align="left" prop="id" label="ID" />
                 <el-table-column align="left" prop="robotName" label="机器人名称" />
@@ -136,6 +136,7 @@ export default {
                 .catch(() => { })
         },
         getList() {
+            this.loading = true;
             robotList(this.queryParams).then((response) => {
                 console.log("List");
                 this.tableData = response.rows

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-loading="loading" class="container">
     <div>
       <el-row class="dropdown-container">
         <el-col :span="24">
