@@ -12,17 +12,16 @@
           </el-form-item>
         </el-form>
         <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
+          <!-- <el-col :span="1.5">
             <el-button type="primary" plain icon="el-icon-plus" :disabled="false" size="mini" @click="openDialog">新增</el-button>
-          </el-col>
+          </el-col> -->
           <el-col :span="1.5">
-            <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="ids.length === 0" @click="handleDelete">删除</el-button>
+            <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="ids.length === 0"
+              @click="handleDelete">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="tableData" stripe style="width: 100%" 
-        :expand-row-keys="expandedRows" 
-        v-loading="loading" 
-        @selection-change="handleSelectionChange">
+        <el-table :data="tableData" stripe style="width: 100%" :expand-row-keys="expandedRows" v-loading="loading"
+          @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />
           <el-table-column prop="id" label="商行编号" align="center" />
           <el-table-column label="商行" prop="merchant" align="center">
@@ -60,7 +59,7 @@
       <div>
         <!-- 添加或修改参数配置对话框 -->
         <el-dialog :title="title" :visible.sync="coinsale" width="600px" append-to-body>
-          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+          <el-form ref="form" :model="form" :rules="rules.form" label-width="80px">
             <el-row>
               <el-col :span="24">
                 <el-form-item label="商户名称" prop="merchantName">
@@ -96,15 +95,15 @@
           </div>
         </el-dialog>
       </div>
-      <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-      :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
-      @size-change="getList" />
+      <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :total="total" :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
+        @size-change="getList" />
     </div>
   </div>
 </template>
 
 <script>
-import { sellMerchant, listItem, delMerchant,addMerchant } from '@/api/content/item'
+import { sellMerchant, updateMerchant, listItem, delMerchant, addMerchant } from '@/api/content/item'
 
 export default {
   name: 'Item',
@@ -140,21 +139,29 @@ export default {
       coinsale: false,
       //表单验证
       rules: {
-        merchantName: [
-          { required: true, message: '请输入商户名', trigger: 'blur' },
-        ],
-        qq: [
-          { required: true, message: '请输入提现账号', trigger: 'blur' },
-          { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' }
-        ],
-        wx: [
-          { required: true, message: '请输入微信或YY', trigger: 'blur' },
-          { pattern: /^[a-zA-Z0-9]+$/, message: '请输入数字或字母', trigger: 'blur' }
-        ],
-        ratio: [
-          { required: true, message: '请选择账户提现比例', trigger: 'blur' },
-          { pattern: /^[0-9]+$/, message: '请输入数字或字母', trigger: 'blur' }
-        ]
+        form: {
+          merchantName: [
+            { required: true, message: '请输入商户名', trigger: 'blur' },
+            { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]{1,20}$/, message: '请输入商户名', trigger: 'blur' }
+          ],
+          qq: [
+            { required: true, message: '请输入QQ', trigger: 'blur' },
+            { pattern: /^\d{1,10}$/, message: '请输入合规的QQ', trigger: 'blur' }
+          ],
+          wx: [
+            { required: true, message: '请输入微信号', trigger: 'blur' },
+            { pattern: /^[A-Za-z0-9]{1,15}$/, message: '请输入数字或字母', trigger: 'blur' }
+          ],
+          ratio: [
+            { required: true, message: '请输入数字1-10000的数字', trigger: 'blur' },
+            { pattern: /^(?:[1-9]\d{0,3}|10000)$/, message: '请输入数字1-10000的数字', trigger: 'blur' }
+
+          ],
+          yy: [
+            { required: true, message: '请输入YY', trigger: 'blur' },
+            { pattern: /^[A-Za-z0-9]{1,10}$/, message: '请输入数字或字母', trigger: 'blur' }
+          ]
+        }
 
       }
     }
@@ -186,6 +193,11 @@ export default {
       this.queryParams.pageNum = 1
       this.getList()
     },
+    //修改按钮
+    handleUpdate(row) {
+      this.coinsale = true;
+      this.form = row
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
 
@@ -201,19 +213,21 @@ export default {
         })
         .catch(() => { })
     },
-    /** 新增商户 */
+    /** 提交按钮 */
     submitForm(form) {
-      this.$modal
-        .confirm("是否新增商户" + form.merchantName)
-        .then(function () {
-          return addMerchant(form)
-        })
-        .then(() => {
-          this.getList()
-          this.$modal.msgSuccess('新增成功')
-        })
-        .catch(() => { })
-      this.coinsale= false;
+      this.$refs.form.validate(valid => {
+        console.log(valid);
+        if (valid) {
+          updateMerchant(form).then(() => {
+            this.getList()
+            this.$modal.msgSuccess('修改成功')
+            this.coinsale = false;
+          })
+            .catch(() => {
+              this.$modal.msgSuccess('修改失败')
+            })
+        }
+      })
     },
     // 取消按钮
     cancel() {
@@ -222,29 +236,6 @@ export default {
     openDialog() {
       this.coinsale = true;
       console.log("test");
-    },
-    validateForm(action) {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          // 验证通过，执行出售操作
-          this.sell(this.form);
-          //完成请求退出对话框
-          this.coinsale = false;
-        } else {
-          // 验证未通过，给出提示信息
-          this.$message.error('请填写正确的表单信息');
-        }
-      });
-
-    },
-    sell(form) {
-      sellMerchant(form).then((response) => {
-        if (response.rows != null) {
-          $message("提现成功")
-        } else {
-          $message("提现失败")
-        }
-      })
     }
   }
 }

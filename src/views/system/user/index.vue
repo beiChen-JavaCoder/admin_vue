@@ -113,12 +113,8 @@
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择角色" @change="hhh">
-                <el-option 
-                v-for=" item in roleOptions" 
-                :key="item.id" 
-                :label="item.roleName" 
-                :value="item.id" 
-                :disabled="item.status === 1" />
+                <el-option v-for=" item in roleOptions" :key="item.id" :label="item.roleName" :value="item.id"
+                  :disabled="item.status === 1" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -226,8 +222,12 @@ export default {
       // 表单校验
       rules: {
         userName: [
-          { required: true, message: "用户名称不能为空", trigger: "blur" },
-          { min: 5, max: 20, message: '用户名称长度必须介于 2 和 20 之间', trigger: 'blur' }
+          {
+            pattern: /^[a-zA-Z0-9]{2,20}$/,
+            message: '用户名称必须由2至20位英文或数字组成',
+            trigger: 'blur'
+          }
+
         ],
         nickName: [
           { required: true, message: "用户昵称不能为空", trigger: "blur" },
@@ -289,7 +289,7 @@ export default {
       //对话框类型
       dialogType: null,
       //角色组
-      roleIds:[]
+      roleIds: []
     }
   },
   watch: {},
@@ -297,11 +297,7 @@ export default {
     this.getList()
   },
   methods: {
-    hhh() {
-      console.log("form", this.form);
-      console.log("hh", this.form.hh);
 
-    },
     //绑定商户按钮
     handlebing(row) {
       //打开对话框

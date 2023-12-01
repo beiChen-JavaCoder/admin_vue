@@ -8,6 +8,14 @@ export function addMerchant(form) {
     data: form
   })
 }
+//修改用户
+export function updateMerchant(form) {
+  return request({
+    url: '/merchant',
+    method: 'put',
+    data: form
+  })
+}
 // 查询商户列表
 export function listItem(query) {
   return request({

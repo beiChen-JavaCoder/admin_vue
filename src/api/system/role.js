@@ -32,9 +32,9 @@ export function updateRole(data) {
   })
 }
 // 删除角色
-export function delRole(roleId) {
+export function delRole(roleIds) {
   return request({
-    url: '/system/role/' + roleId,
+    url: '/system/role/'+roleIds ,
     method: 'delete'
   })
 }

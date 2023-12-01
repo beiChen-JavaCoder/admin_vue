@@ -176,9 +176,7 @@ export default {
             .then(() => {
               this.coinsale = false;
               this.$modal.msgSuccess('充值成功,等待5分钟后台刷新')
-              this.form = {
-                num: 0
-              }
+              this.form.num = 0
             })
             .catch(() => {
               this.$modal.msgError('充值失败，请联系管理员')
@@ -197,6 +195,7 @@ export default {
       this.form.userName = row.userName;
       this.form.rolename = row.rolename;
       this.form.gold = row.gold;
+      this.title = '充值金币';
       this.coinsale = true;
     },
   }

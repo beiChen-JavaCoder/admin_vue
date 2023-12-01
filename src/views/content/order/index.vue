@@ -71,8 +71,14 @@
                     </el-table-column>
                     <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
                         <template slot-scope="scope">
-                            <el-button size="mini" type="text" icon="el-icon-edit"
-                                @click="openDialog(scope.row)">审核</el-button>
+                            <template v-if="scope.row.status != 1">
+                                <el-button size="mini" type="text" icon="el-icon-edit"
+                                    @click="openDialog(scope.row)">审核</el-button>
+                            </template>
+                            <template v-if="scope.row.status == 3 || scope.row.status == 1">
+                                <el-button size="mini" type="text" icon="el-icon-edit"
+                                    @click="handledelet(scope.row)">删除</el-button>
+                            </template>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -86,23 +92,22 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="账号类型">
-                                    <el-input v-model="form.sAccountType"  :disabled="true" maxlength="30" />
+                                    <el-input v-model="form.sAccountType" :disabled="true" maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
                                 <el-form-item label="收款账号">
-                                    <el-input v-model="form.payeeAccount"  :disabled="true"
-                                        maxlength="30" />
+                                    <el-input v-model="form.payeeAccount" :disabled="true" maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
                                 <el-form-item label="收款昵称">
-                                    <el-input v-model="form.payeeNickname"  :disabled="true" maxlength="30" />
+                                    <el-input v-model="form.payeeNickname" :disabled="true" maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
                                 <el-form-item label="创建时间">
-                                    <el-input v-model="form.createTimeDate"  :disabled="true" maxlength="30" />
+                                    <el-input v-model="form.createTimeDate" :disabled="true" maxlength="30" />
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
@@ -128,8 +133,8 @@
 </template>
   
 <script>
-import { sellMerchant, delMerchant,} from '@/api/content/item'
-import {orderList,updateOrder } from '@/api/content/order'
+import { sellMerchant, delMerchant, } from '@/api/content/item'
+import { orderList, updateOrder } from '@/api/content/order'
 
 export default {
     name: 'order',
@@ -138,7 +143,7 @@ export default {
             value: '',
             tableData: [
             ],
-            title:undefined,
+            title: undefined,
             // 选中数组
             ids: [],
             // 表单参数
@@ -159,22 +164,24 @@ export default {
             coinsale: false,
             //表单验证
             rules: {
-                qq: [
-                    { required: true, message: '请输入提现账号', trigger: 'blur' },
-                    { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' }
-                ]
+                form: {
+                    voucher: [
+                        { required: true, message: '请输入订单号', trigger: 'blur' },
+                        { pattern: /^[0-9]+$/, message: '请输入订单号', trigger: 'blur' }
+                    ]
+                },
 
             }
         }
     },
-    // loading: false,
+    loading: true,
     watch: {},
     created() {
         this.getList()
     },
     computed: {
         accountType() {
-            return this.form.accountType 
+            return this.form.accountType
         }
     },
 
@@ -192,10 +199,10 @@ export default {
                 this.tableData = response.rows
                 this.total = response.total
                 this.loading = false
-      
+
             })
         },
-        
+
         /** 搜索按钮操作 */
         handleQuery() {
             this.queryParams.pageNum = 1
@@ -219,8 +226,9 @@ export default {
         /** 新增商户 */
         submitForm(form) {
             this.$modal
-                .confirm("是否确认审核提现编号" + form.id+"的提现订单")
+                .confirm("是否确认审核提现编号" + form.id + "的提现订单")
                 .then(function () {
+                    console.log("form",form);
                     return updateOrder(form)
                 })
                 .then(() => {
@@ -228,7 +236,6 @@ export default {
                     this.$modal.msgSuccess('审核已提交')
                 })
                 .catch(() => { })
-                this.getList()
             this.coinsale = false;
         },
         // 取消按钮
