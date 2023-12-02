@@ -20,7 +20,7 @@
               @click="handleDelete">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="tableData" stripe style="width: 100%" :expand-row-keys="expandedRows" v-loading="loading"
+        <el-table :data="tableData" stripe style="width: 100%" v-loading="loading"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />
           <el-table-column prop="id" label="商行编号" align="center" />
@@ -45,8 +45,23 @@
               </el-tooltip>
             </template>
           </el-table-column>
+          <el-table-column label="金币" prop="gold" align="center">
+            <template slot-scope="scope">
+              <el-tooltip :content="scope.row.gold" placement="top">
+                <div class="tooltip">{{ scope.row.gold }}</div>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column label="渠道" prop="channel" align="center">
+            <template slot-scope="scope">
+              <el-tooltip :content="scope.row.channel" placement="top">
+                <div class="tooltip">{{ scope.row.channel }}</div>
+              </el-tooltip>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
             <template slot-scope="scope">
+              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleCharge(scope.row)">充值</el-button>
               <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
               <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
               <!-- <el-button size="mini" type="text" icon="el-icon-coin" @click="openDialog(scope.row)">出售金币</el-button> -->
@@ -86,11 +101,41 @@
                   <el-input v-model="form.ratio" placeholder="请输入比例" maxlength="30" />
                 </el-form-item>
               </el-col>
+              <el-col :span="24">
+                <el-form-item label="渠道号" prop="channel">
+                  <el-input v-model="form.channel" placeholder="请输入比例" maxlength="30" />
+                </el-form-item>
+              </el-col>
             </el-row>
 
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="submitForm(form)">确 定</el-button>
+            <el-button @click="cancel">取 消</el-button>
+          </div>
+        </el-dialog>
+        <el-dialog :title="title" :visible.sync="chargeOpen" width="600px" append-to-body>
+          <el-form ref="chargeForm" :model="chargeForm" :rules="rules" label-width="80px">
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="商行">
+                  <el-input v-model="chargeForm.merchantName" disabled></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item :span="12" label="充值数量">
+                  <el-input-number v-model="chargeForm.num"></el-input-number>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <span style="color: red; font-size: medium;"> 充值金额:{{ parseInt(chargeForm.num * 100) }}</span>
+              </el-col>
+
+            </el-row>
+
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="submitCharge">确 定</el-button>
             <el-button @click="cancel">取 消</el-button>
           </div>
         </el-dialog>
@@ -103,7 +148,7 @@
 </template>
 
 <script>
-import { sellMerchant, updateMerchant, listItem, delMerchant, addMerchant } from '@/api/content/item'
+import { charge, updateMerchant, listItem, delMerchant } from '@/api/content/item'
 
 export default {
   name: 'Item',
@@ -121,6 +166,8 @@ export default {
       ],
       // 选中数组
       ids: [],
+      //充值标题
+      title:'',
       // 表单参数
       form: {},
       // 查询参数
@@ -131,11 +178,18 @@ export default {
         dataRange: undefined
 
       },
+      //充值表单
+      chargeForm: {
+        num:1,
+      },
       // 是否显示弹出层
       open: false,
       // 总条数
       total: 0,
       showSearch: true,
+      //充值对话框
+      chargeOpen: false,
+      //修改对话框
       coinsale: false,
       //表单验证
       rules: {
@@ -160,6 +214,10 @@ export default {
           yy: [
             { required: true, message: '请输入YY', trigger: 'blur' },
             { pattern: /^[A-Za-z0-9]{1,10}$/, message: '请输入数字或字母', trigger: 'blur' }
+          ],
+          channel: [
+            { required: true, message: '请填写渠道号', trigger: 'blur' },
+            { pattern: /^[A-Za-z0-9]{1,10}$/, message: '请输入数字或字母', trigger: 'blur' }
           ]
         }
 
@@ -168,6 +226,7 @@ export default {
   },
   //遮蔽层
   loading: true,
+  //重置表单
   watch: {},
   created() {
     this.getList()
@@ -179,6 +238,26 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length !== 1
       this.multiple = !selection.length
+    },
+    //打开充值对话框
+    handleCharge(row) {
+      this.title  = '商户充值'
+      this.chargeOpen = true;
+      this.chargeForm.id = row.id;
+      this.chargeForm.merchantName = row.merchantName;
+
+    },
+    //充值
+    submitCharge() {
+      var params={
+          num: this.chargeForm.num*100,
+          merchantId: this.chargeForm.id
+      };
+      charge(params).then(() => {
+        this.chargeOpen = false;
+          this.getList();
+          this.$modal.msgSuccess('充值完毕')
+      })
     },
     getList() {
       this.loading = true;
@@ -231,7 +310,8 @@ export default {
     },
     // 取消按钮
     cancel() {
-      this.coinsale = false
+      this.coinsale = false;
+      this.chargeOpen = false;
     },
     openDialog() {
       this.coinsale = true;

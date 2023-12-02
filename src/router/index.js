@@ -77,6 +77,20 @@ export const constantRoutes = [
       hidden: true
     }]
   },
+  {
+    //个人中心
+    path: '/user',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'profile',
+        component: () => import('@/views/system/user/profile/index'),
+        name: 'Profile',
+        meta: { title: '个人中心', icon: 'user' }
+      }
+    ]
+  },
   //角色管理
   {
     path: '/system/role',
@@ -187,8 +201,8 @@ export const constantRoutes = [
       hidden: true
     }]
   },
-    //游戏系统管理
-    {
+  //游戏系统管理
+  {
     path: '/system/game',
     component: Layout,
     children: [{

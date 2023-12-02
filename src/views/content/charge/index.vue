@@ -3,7 +3,7 @@
     <div>
       <div style="position: relative;">
         <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-          <el-form-item label="玩家id：" prop="userName">
+          <el-form-item label="玩家id:" prop="userName">
             <el-input v-model="queryParams.id" placeholder="玩家id" clearable size="small" style="width: 240px"
               @keyup.enter.native="handleQuery" />
           </el-form-item>
@@ -20,6 +20,8 @@
           <el-table-column label="角色昵称" prop="rolename" align="center" />
 
           <el-table-column label="金币" prop="gold" align="center" />
+          <el-table-column label="渠道号" prop="channel" align="center" />
+
 
           <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
             <template slot-scope="scope">
@@ -49,9 +51,6 @@
                 <el-form-item :span="12" label="充值数量">
                   <el-input-number v-model="form.num"></el-input-number>
                 </el-form-item>
-                <!-- <el-form-item label="金币数量">
-                  {{ calculatedCoins }}
-                </el-form-item> -->
               </el-col>
               <el-col :span="24">
                 <span style="color: red; font-size: medium;"> 充值金额:{{ form.num * 100 }}</span>
@@ -92,7 +91,7 @@ export default {
       ids: [],
       // 表单参数
       form: {
-        num: 0, // 充值数量初始值
+        num: 1, // 充值数量初始值
         gold: 0,
         totalGold: 0
       },
@@ -157,7 +156,6 @@ export default {
       }
 
       const Number = form.num
-      console.log(form.num);
       var data = {
         num : parseInt(form.num) * 100,
         userName: form.userName,
@@ -178,9 +176,6 @@ export default {
               this.$modal.msgSuccess('充值成功,等待5分钟后台刷新')
               this.form.num = 0
             })
-            .catch(() => {
-              this.$modal.msgError('充值失败，请联系管理员')
-            })
 
         })
         .catch(() => { })
@@ -195,6 +190,7 @@ export default {
       this.form.userName = row.userName;
       this.form.rolename = row.rolename;
       this.form.gold = row.gold;
+      this.form.channel = row.channel;
       this.title = '充值金币';
       this.coinsale = true;
     },

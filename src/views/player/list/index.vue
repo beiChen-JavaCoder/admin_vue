@@ -37,7 +37,7 @@
                             </el-col>
                         </div>
                     </el-form-item>
-                    <el-form-item prop="lastLogin" :span="6">
+                    <!-- <el-form-item prop="lastLogin" :span="6">
                         <div class="block">
                             <span class="form-item-span">是否在线</span>
                             <el-select size="small" v-model="queryParams.isOnline" clearable placeholder="请选择">
@@ -46,7 +46,7 @@
                                 </el-option>
                             </el-select>
                         </div>
-                    </el-form-item>
+                    </el-form-item> -->
                     <!-- <el-form-item prop="recharge" :span="6">
                         <div class="block">
                             <el-col :span="4">
@@ -76,37 +76,21 @@
                         </div>
                     </el-form-item> -->
                     <el-form-item>
-                        <div>
                             <el-button size="mini" icon="el-icon-search" type="primary" @click="handleQuery">搜索</el-button>
                             <el-button size="mini" icon="el-icon-delete" @click="handleReset">重置</el-button>
-                        </div>
                     </el-form-item>
                     <br />
-                    <el-form-item>
-                        <span>
-                            <span class="form-item-span-span">总金币： </span>
-                            <span class="form-item-span-font">{{ player.allGold }}</span>
-                            <span class="form-item-span-span">, 总充值：</span>
-                            <span class="form-item-span-font">{{ player.allRecharge }} </span>
-                            <span class="form-item-span-span">IDR
-                                <!--  , 总输赢：</span>
-                            <span class="form-item-span-font">{{ player.allWinningLosing }}</span>
-                            <span class="form-item-span-span">, 当日总输赢：</span>
-                            <span class="form-item-span-font">{{ player.todayWinningLosing }} -->
-                            </span>
-                        </span>
-                    </el-form-item>
 
 
                     <el-table :data="tableData" @selection-change="handleSelectionChange" >
                         <el-table-column type="selection" width="55" />
                         <el-table-column label="用户rid" align="center" prop="rid" />
-                        <el-table-column label="是否在线" align="center" prop="isOnline">
+                        <!-- <el-table-column label="是否在线" align="center" prop="isOnline">
                             <template slot-scope="scope">
                                 <el-tag type="success" v-if="scope.row.isOnline == 1">在线</el-tag>
                                 <el-tag type="danger" v-else>离线</el-tag>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column label="昵称" align="center" prop="rolename" />
                         <el-table-column label="账号" align="center" prop="userName" />
 

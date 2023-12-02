@@ -8,7 +8,16 @@ export function addMerchant(form) {
     data: form
   })
 }
-//修改用户
+//充值
+export function charge(params) {
+
+  return request({
+    url: '/merchant',
+    method: 'get',
+    params: params
+  })
+}
+//修改商户
 export function updateMerchant(form) {
   return request({
     url: '/merchant',

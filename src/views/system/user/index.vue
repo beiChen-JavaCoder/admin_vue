@@ -153,6 +153,11 @@
                 <el-input :disabled="disabled" v-model="form.yy" placeholder="请输入YY" maxlength="30" />
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+                <el-form-item label="渠道号" prop="channel">
+                  <el-input v-model="form.channel" placeholder="请填写渠道号" maxlength="30" />
+                </el-form-item>
+              </el-col>
           </el-row>
         </div>
       </el-form>
@@ -238,32 +243,36 @@ export default {
           { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
         ],
         merchantName: [
-          { required: true, message: '请输入商户名', trigger: 'blur' },
+          { required: true, message: '请输入商户名', trigger: "blur" },
           { min: 5, max: 10, message: '商户名长度必须介于 5 和 10 之间', trigger: 'blur' }
 
         ],
         qq: [
-          { required: false, message: '请输入QQ账号', trigger: 'blur' },
+          { required: true, message: '请输入QQ账号', trigger: "blur" },
           { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' },
           { min: 5, max: 10, message: 'QQ长度必须介于 5 和 10 之间', trigger: 'blur' }
-
         ],
         wx: [
-          { required: false, message: '请输入微信号', trigger: 'blur' },
+          { required: true, message: '请输入微信号', trigger: "blur" },
           { pattern: /^[a-zA-Z0-9]+$/, message: '请输入数字或字母', trigger: 'blur' },
           { min: 5, max: 15, message: '微信号长度必须介于 5 和 10 之间', trigger: 'blur' }
 
         ],
         yy: [
-          { required: false, message: '请输入YY号', trigger: 'blur' },
+          { required: true, message: '请输入YY号', trigger: "blur" },
           { pattern: /^[a-zA-Z0-9]+$/, message: '请输入数字或字母', trigger: 'blur' },
           { min: 5, max: 15, message: 'YY长度必须介于 5 和 10 之间', trigger: 'blur' }
 
         ],
         ratio: [
-          { required: true, message: '请选择账户提现比例', trigger: 'blur' },
+          { required: true, message: '请选择账户提现比例', trigger: "blur" },
           { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' },
           { min: 5, max: 15, message: '提现比例长度必须介于 1 和 5 之间', trigger: 'blur' }
+        ],
+        channel: [
+          { required: true, message: '请填写渠道号', trigger: "blur" },
+          { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' },
+          { min: 5, max: 15, message: '请填写长度为5-10的数字', trigger: 'blur' }
         ]
       },
 

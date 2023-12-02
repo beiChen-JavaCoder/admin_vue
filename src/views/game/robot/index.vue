@@ -128,143 +128,139 @@ export default {
 
             },
 
-            methods: {
 
 
-                validateNumber(min, max) {
-                    if (isNaN(min) || isNaN(max)) {
-                        return this.$modal.msgError('参数不合规！');
-                    }
-                    return '';
-                },
-                handleSubmit(type) {
-
-                    this.$refs.form.validate(valid => { }).then()
-
-
-
-                    var robotContrlUpdate = {};
-                    var UpFrom = this.form;
-                    if (type === 0) {
-                        robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.initScore));
-                        robotContrlUpdate.type = 0;
-                        var min = UpFrom.initScore.min;
-                        var max = UpFrom.initScore.max;
-                        robotContrlUpdate.min = min;
-                        robotContrlUpdate.max = max;
-                        this.validateNumber(min, max);
-                        if (!(min < max && min >= 1 && max <= 99999999999)) {
-                            return this.$modal.msgError('初始金币最小为1,最大99999999999');
-                        }
-                    } else if (type === 1) {
-                        robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.betScore));
-                        robotContrlUpdate.type = 1;
-                        var min = UpFrom.betScore.min;
-                        var max = UpFrom.betScore.max;
-                        robotContrlUpdate.min = min;
-                        robotContrlUpdate.max = max;
-                         this.validateNumber(min, max);
-                        if (!(min < max && min >= 10000 && max <= 10000000)) {
-                            return this.$modal.msgError('最小下注10000,最大下注10000000');
-                        }
-                    } else if (type === 2) {
-                        robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.carryScore));
-                        robotContrlUpdate.type = 2;
-                        var min = UpFrom.carryScore.min;
-                        var max = UpFrom.carryScore.max;
-                        robotContrlUpdate.min = min;
-                        robotContrlUpdate.max = max;
-                        this.validateNumber(min, max);
-                        if (!(min < max && min >= 1 && max <= 99999999999)) {
-                            return this.$modal.msgError('存取最小为1,最大99999999999');
-                        }
-                    } else if (type === 3) {
-                        robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.betTime));
-                        robotContrlUpdate.type = 3;
-                        var min = UpFrom.betTime.min;
-                        var max = UpFrom.betTime.max;
-                        robotContrlUpdate.min = min;
-                        robotContrlUpdate.max = max;
-                        this.validateNumber(min, max);
-                        if (!(min < max && min > 0 && max <= 30)) {
-                            return this.$modal.msgError('时间最小1,最大30');
-                        }
-                    } else if (type === 4) {
-
-                        robotContrlUpdate.type = 4;
-                        var betRatio = UpFrom.betRatio;
-                        robotContrlUpdate.betRatio = betRatio;
-                        if(isNaN(betRatio)){
-                            return this.$modal.msgError('参数不合规');
-                        }
-                        if (!betRatio >= 1 && betRatio <= 100000) {
-                            return this.$modal.msgError('万分比大于1小于10000');
-                        }
-                    } else if (type === 5) {
-                        robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.inRoomNum));
-                        robotContrlUpdate.type = 5;
-                        var min = UpFrom.inRoomNum.min;
-                        var max = UpFrom.inRoomNum.max;
-                        robotContrlUpdate.min = min;
-                        robotContrlUpdate.max = max;
-                        this.validateNumber(min, max);
-                        if (!(min < max && min >= 1 && max <= 100)) {
-                            return this.$modal.msgError('机器人最小大于1,最大小于100');
-                        }
-                    }
-                    robotContrlUpdate.gameId = UpFrom.gameId;
-                    upRobotScore(robotContrlUpdate)
-                        .then(() => {
-                            this.getList()
-                            this.$message({
-                                showClose: true,
-                                message: '执行成功',
-                                type: 'success'
-                            });
-                        })
-                        ,
-                        //刷新当前数据
-
-                        console.log("更新后的form");
-                    console.log(this.form)
-                },
-                handleBeforeUpload(file) {
-                    // 在这里可以对文件进行处理，例如校验、压缩等操作
-                    // 处理完成后调用自定义的网络请求工具类进行上传
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    importData(formData).then(response => {
-                        console.log('文件上传成功', response);
-                        // 处理上传成功后的逻辑
-                    }).catch(error => {
-                        console.error('文件上传失败', error);
-                        // 处理上传失败后的逻辑
-                    });
-
-                    return false;  // 返回 false 阻止 Element UI 组件默认的上传行为
-                },
-                getList() {
-                    this.loading = true;
-
-                    listGame().then(response => {
-
-                        this.games = response.rows;
-                        this.total = response.total;
-                        this.game = this.games[0];
-                        this.form = this.games[0];
-                        this.loading = false;
-                    });
-
-                }
-            },
-            created() {
-                this.getList()
-            },
             computed: {
             }
         }
-    }
+    },
+    
+    methods: {
+        validateNumber(min, max) {
+            if (isNaN(min) || isNaN(max)) {
+                return this.$modal.msgError('参数不合规！');
+            }
+            return '';
+        },
+        handleSubmit(type) {
+            var robotContrlUpdate = {};
+            var UpFrom = this.form;
+            if (type === 0) {
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.initScore));
+                robotContrlUpdate.type = 0;
+                var min = UpFrom.initScore.min;
+                var max = UpFrom.initScore.max;
+                robotContrlUpdate.min = min;
+                robotContrlUpdate.max = max;
+                this.validateNumber(min, max);
+                if (!(min < max && min >= 1 && max <= 99999999999)) {
+                    return this.$modal.msgError('初始金币最小为1,最大99999999999');
+                }
+            } else if (type === 1) {
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.betScore));
+                robotContrlUpdate.type = 1;
+                var min = UpFrom.betScore.min;
+                var max = UpFrom.betScore.max;
+                robotContrlUpdate.min = min;
+                robotContrlUpdate.max = max;
+                this.validateNumber(min, max);
+                if (!(min < max && min >= 10000 && max <= 10000000)) {
+                    return this.$modal.msgError('最小下注10000,最大下注10000000');
+                }
+            } else if (type === 2) {
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.carryScore));
+                robotContrlUpdate.type = 2;
+                var min = UpFrom.carryScore.min;
+                var max = UpFrom.carryScore.max;
+                robotContrlUpdate.min = min;
+                robotContrlUpdate.max = max;
+                this.validateNumber(min, max);
+                if (!(min < max && min >= 1 && max <= 99999999999)) {
+                    return this.$modal.msgError('存取最小为1,最大99999999999');
+                }
+            } else if (type === 3) {
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.betTime));
+                robotContrlUpdate.type = 3;
+                var min = UpFrom.betTime.min;
+                var max = UpFrom.betTime.max;
+                robotContrlUpdate.min = min;
+                robotContrlUpdate.max = max;
+                this.validateNumber(min, max);
+                if (!(min < max && min > 0 && max <= 30)) {
+                    return this.$modal.msgError('时间最小1,最大30');
+                }
+            } else if (type === 4) {
+
+                robotContrlUpdate.type = 4;
+                var betRatio = UpFrom.betRatio;
+                robotContrlUpdate.betRatio = betRatio;
+                if (isNaN(betRatio)) {
+                    return this.$modal.msgError('参数不合规');
+                }
+                if (!betRatio >= 1 && betRatio <= 100000) {
+                    return this.$modal.msgError('万分比大于1小于10000');
+                }
+            } else if (type === 5) {
+                robotContrlUpdate = JSON.parse(JSON.stringify(UpFrom.inRoomNum));
+                robotContrlUpdate.type = 5;
+                var min = UpFrom.inRoomNum.min;
+                var max = UpFrom.inRoomNum.max;
+                robotContrlUpdate.min = min;
+                robotContrlUpdate.max = max;
+                this.validateNumber(min, max);
+                if (!(min < max && min >= 1 && max <= 100)) {
+                    return this.$modal.msgError('机器人最小大于1,最大小于100');
+                }
+            }
+            robotContrlUpdate.gameId = UpFrom.gameId;
+            upRobotScore(robotContrlUpdate)
+                .then(() => {
+                    this.getList()
+                    this.$message({
+                        showClose: true,
+                        message: '执行成功',
+                        type: 'success'
+                    });
+                })
+                ,
+                //刷新当前数据
+
+                console.log("更新后的form");
+            console.log(this.form)
+        },
+        handleBeforeUpload(file) {
+            // 在这里可以对文件进行处理，例如校验、压缩等操作
+            // 处理完成后调用自定义的网络请求工具类进行上传
+            const formData = new FormData();
+            formData.append('file', file);
+
+            importData(formData).then(response => {
+                console.log('文件上传成功', response);
+                // 处理上传成功后的逻辑
+            }).catch(error => {
+                console.error('文件上传失败', error);
+                // 处理上传失败后的逻辑
+            });
+
+            return false;  // 返回 false 阻止 Element UI 组件默认的上传行为
+        },
+        getList() {
+            this.loading = true;
+
+            listGame().then(response => {
+
+                this.games = response.rows;
+                this.total = response.total;
+                this.game = this.games[0];
+                this.form = this.games[0];
+                this.loading = false;
+            });
+
+        }
+    },
+    created() {
+        this.getList();
+    },
 }
 </script>
   

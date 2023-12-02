@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import directive from './directive' // directive
 import '@/styles/index.scss' // global css
+import '@/styles/admin.scss' // global
 
 import App from './App'
 import store from './store'

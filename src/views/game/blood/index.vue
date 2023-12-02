@@ -1,8 +1,5 @@
 <template>
   <div v-loading="loading" class="container">
-    <el-table ref="tables" v-loading="loading" :data="games" @selection-change="handleSelectionChange">
-      <el-table-column></el-table-column>
-    </el-table>
     <div>
       <el-row class="dropdown-container">
         <el-col :span="24">
@@ -116,7 +113,6 @@
 <script>
 
 import { listBlood, updateBolood, refreshScore } from '@/api/game/blood'
-import { listGame } from '@/api/game/robot';
 
 export default {
   name: 'blood',
@@ -193,9 +189,7 @@ export default {
       loading: true
 
     }
-  }
-  ,
-
+  },
   methods: {
     //过滤属性显示
     formatCurrency(value) {
