@@ -154,8 +154,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="渠道号" prop="channel">
-                  <el-input v-model="form.channel" placeholder="请填写渠道号" maxlength="30" />
+                <el-form-item label="渠道号" prop="channel" >
+                  <el-input v-model="form.channel" placeholder="请填写渠道号" maxlength="30" :disabled="disabled" />
                 </el-form-item>
               </el-col>
           </el-row>
@@ -388,6 +388,7 @@ export default {
         this.form.qq = response.merchantEntity.qq
         this.form.ratio = response.merchantEntity.ratio
         this.form.wx = response.merchantEntity.wx
+        this.form.channel = response.merchantEntity.channel
         this.form.yy = response.merchantEntity.yy
       })
       this.disabled = true;

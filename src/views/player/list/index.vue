@@ -98,7 +98,10 @@
                         <el-table-column label="最后登陆时间" align="center" prop="lastlogin_time" /> -->
                         <el-table-column label="用户金币" align="center" prop="gold" />
                         <!-- <el-table-column label="充值金币" align="center" prop="recharge" />
-                        <el-table-column label="总输赢" align="center" prop="winningLosing" /> -->
+                            -->
+                        <el-table-column label="渠道号" align="center" prop="channel" >
+                        </el-table-column>
+
                     </el-table>
                 </el-form>
             </el-col>
